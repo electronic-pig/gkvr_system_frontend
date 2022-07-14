@@ -5,7 +5,7 @@ module.exports = defineConfig({
   outputDir: 'dist', // 输出文件目录
   assetsDir: 'static',
   devServer: {
-    port: 8080, // 设置端口号
+    // port: 8080, // 设置端口号
     host: '127.0.0.1', // ip 本地
     historyApiFallback: true,
     allowedHosts: 'all', //是否关闭用于 DNS 重绑定的 HTTP 请求的 HOST 检查
@@ -13,8 +13,10 @@ module.exports = defineConfig({
     open: false, //配置自动启动浏览器
     proxy: { //目的是解决跨域，若测试环境不需要跨域，则不需要进行该配置
       '/api': { // 拦截以 /api 开头的url接口
-        target: 'http://gkzytbsxdez5050.vaiwan.com', //目标接口域名
+        // target: 'http://gkzytbsxdez5050.vaiwan.com', //目标接口域名
         // target: 'http://127.0.0.1:4523/m1/1261128-0-default',
+        // target: 'http://127.0.0.1:5000',
+        target: 'http://47.103.139.192:5000',
         changeOrigin: true, //是否跨域
         ws: true, //如果要代理 websockets，配置这个参数
         secure: false, // 如果是https接口，需要配置这个参数
