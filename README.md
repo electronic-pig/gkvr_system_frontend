@@ -1,5 +1,4 @@
-# gaokao
-<<<<<<< HEAD
+# 高考志愿推荐系统，前端部分
 
 ## Project setup
 ```
