@@ -2,35 +2,28 @@
   <div class="login-wrap">
     <div class="ms-login">
       <div class="ms-title">高考志愿推荐平台</div>
-      <el-form
-        :model="form"
-        :rules="rules"
-        ref="login"
-        label-width="0px"
-        class="ms-content"
-      >
+      <el-form :model="form" :rules="rules" ref="login" label-width="0px" class="ms-content">
         <el-form-item prop="username">
           <el-input v-model="form.username" placeholder="用户名">
             <template #prepend>
-                <el-icon><Avatar /></el-icon>
+              <el-icon>
+                <Avatar />
+              </el-icon>
             </template>
           </el-input>
         </el-form-item>
         <el-form-item prop="password">
-          <el-input
-            type="password"
-            placeholder="密码"
-            v-model="form.password"
-            @keyup.enter="clickLogin()"
-          >
+          <el-input type="password" placeholder="密码" v-model="form.password" @keyup.enter="clickLogin()">
             <template #prepend>
-              <el-icon><Lock /></el-icon>
+              <el-icon>
+                <Lock />
+              </el-icon>
             </template>
           </el-input>
         </el-form-item>
         <div class="login-btn">
-            <el-button type="primary" @click="clickLogin()">登录</el-button>
-            <el-button type="primary" @click="clickRegister()">注册</el-button>
+          <el-button type="primary" @click="clickLogin()">登录</el-button>
+          <el-button type="primary" @click="clickRegister()">注册</el-button>
         </div>
         <!-- <p class="login-tips">Tips : 用户名和密码随便填。</p> -->
       </el-form>
@@ -43,13 +36,13 @@
 import { useRouter } from "vue-router";
 import { reactive, ref } from "vue";
 import { ElMessage } from "element-plus";
-import { useStore} from "vuex"
+import { useStore } from "vuex"
 import request from "../utils/request.js";
 import RegisterDialog from "../components/RegisterDialog.vue"
 export default {
   components: {
-      RegisterDialog
-    },
+    RegisterDialog
+  },
   setup() {
     const router = useRouter();
     const handleLogin = () => {
@@ -76,12 +69,12 @@ export default {
       login.value.validate((valid) => {
         if (valid) {
           request
-            .post("/login", form)
+            .post("/user/login", form)
             //.get("http://localhost:8080/user", form)
             .then((res) => {
               // console.log(res);
               // 存token setItem(key,value)
-              if (res.code == 200) {
+              if (res.code == 20000) {
                 //sessionStorage.setItem(token, res.data.token);
                 ElMessage.success("登录成功");
                 router.push("/home");
@@ -128,6 +121,7 @@ export default {
   background-size: 100%;
   animation: slide-bottom 0.5s cubic-bezier(0.215, 0.610, 0.355, 1.000) both;
 }
+
 .ms-title {
   width: 100%;
   line-height: 50px;
@@ -136,6 +130,7 @@ export default {
   color: #000;
   border-bottom: 1px solid #ddd;
 }
+
 .ms-login {
   position: absolute;
   left: 50%;
@@ -145,24 +140,29 @@ export default {
   border-radius: 5px;
   background: rgba(255, 255, 255, 0.5);
   overflow: hidden;
-  animation: slide-bottom-up 0.5s cubic-bezier(.64,1.4,.49,.96) both;
-  animation-delay:200ms;
+  animation: slide-bottom-up 0.5s cubic-bezier(.64, 1.4, .49, .96) both;
+  animation-delay: 200ms;
 }
+
 .ms-content {
   padding: 30px 30px;
 }
+
 .el-input {
   width: 100%;
 }
+
 .login-btn {
   text-align: center;
   display: flex;
 }
+
 .login-btn button {
   width: 100%;
   height: 36px;
   margin-bottom: 10px;
 }
+
 .login-tips {
   font-size: 12px;
   line-height: 30px;
@@ -173,16 +173,18 @@ export default {
   0% {
     transform: translateY(-500px);
   }
+
   100% {
     transform: translateY(0px);
   }
 }
+
 @keyframes slide-bottom-up {
   0% {
     transform: translateY(-500px);
   }
+
   100% {
     transform: translateY(0px);
   }
-}
-</style>
+}</style>

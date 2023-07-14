@@ -1,39 +1,14 @@
 <template>
-  <el-dialog
-    v-model="dialogFormVisible"
-    :append-to-body="false"
-    title="注册"
-    width="30%"
-    @closed="closeDialog()"
-  >
+  <el-dialog v-model="dialogFormVisible" :append-to-body="false" title="注册" width="30%" @closed="closeDialog()">
     <el-form ref="register" :rules="rules" :model="form">
       <el-form-item prop="username" label="用户名" :label-width="formLabelWidth">
-        <el-input
-          v-model="form.username"
-          placeholder="请输入用户名"
-          autocomplete="off"
-        />
+        <el-input v-model="form.username" placeholder="请输入用户名" autocomplete="off" />
       </el-form-item>
       <el-form-item prop="password" label="密码" :label-width="formLabelWidth">
-        <el-input
-          type="password"
-          v-model="form.password"
-          placeholder="请输入密码"
-          autocomplete="off"
-        />
+        <el-input type="password" v-model="form.password" placeholder="请输入密码" autocomplete="off" />
       </el-form-item>
-      <el-form-item
-        prop="checkPassword"
-        label="重复密码"
-        :label-width="formLabelWidth"
-        @keyup.enter="handleRegister()"
-      >
-        <el-input
-          type="password"
-          v-model="form.checkPassword"
-          placeholder="请再次输入密码"
-          autocomplete="off"
-        />
+      <el-form-item prop="checkPassword" label="重复密码" :label-width="formLabelWidth" @keyup.enter="handleRegister()">
+        <el-input type="password" v-model="form.checkPassword" placeholder="请再次输入密码" autocomplete="off" />
       </el-form-item>
     </el-form>
     <template #footer>
@@ -83,7 +58,7 @@ export default {
                 ElMessage.success("注册成功！");
                 store.commit("closeRegisterDialog");
               } else {
-                
+
                 ElMessage.error({
                   // title: "错误",
                   message: '注册失败:' + res.message,
