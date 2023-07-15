@@ -13,9 +13,6 @@ const routes = [{
   path: '/login',
   name: 'login',
   component: () => import('../views/LoginView.vue'),
-  meta: {
-    title: '登录|高考推荐数据库'
-  }
 },
 {
   path: '/home',

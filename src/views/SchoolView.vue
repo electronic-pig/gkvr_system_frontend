@@ -18,30 +18,37 @@
     </div>
     <div class="school-list-wrap">
       <ul>
-        <li v-for="school in pageSchoolList" :key="school.id">
+        <li v-for="school in pageSchoolList" :key="school.schoolId">
           <el-card shadow="hover">
             <div class="school-image">
-              <img :src="'https://static-data.gaokao.cn/upload/logo/' +
-                school.id +
-                '.jpg'
-                " width="100px" height="100px" alt />
+              <img :src="'https://static-data.gaokao.cn/upload/logo/' + school.schoolId + '.jpg'" width="100px"
+                height="100px" alt />
             </div>
             <div class="school-detail">
-              <router-link :to="{ path: '/detail', query: { id: school.id } }" target="_blank">
-                <p>{{ school.name }}</p>
+              <router-link :to="{ path: '/detail', query: { id: school.schoolId } }" target="_blank">
+                <p>{{ school.schoolName }}</p>
               </router-link>
-              <span>&nbsp;&nbsp;{{ school.province }}</span>
-              <span>&nbsp;&nbsp;{{ school.city }}&nbsp;&nbsp;</span>
-              <span v-if="school.wen_score && school.li_score">文科：{{ school.wen_score }}/理科：{{ school.li_score }}</span>
-              <span v-else-if="school.wen_score">文科：{{ school.wen_score }}</span>
-              <span v-else-if="school.li_score">理科：{{ school.li_score }}</span>
-              <span></span>
+              <span v-if="school.degree">{{ school.degree }}</span>
+              <span v-if="school.schoolType">&nbsp;|&nbsp;{{ school.schoolType }}</span>
+              <span v-if="school.owner">&nbsp;|&nbsp;{{ school.owner }}</span>
+              <span v-if="school.provinceName">&nbsp;|&nbsp;{{ school.provinceName }}</span>
+              <span v-if="school.cityName">&nbsp;|&nbsp;{{ school.cityName }}</span>
+              <span v-if="school.countyName">&nbsp;|&nbsp;{{ school.countyName }}</span>
+              <span v-if="school.doublehigh">&nbsp;|&nbsp;{{ school.doublehigh }}</span>
+              <span v-if="school.is985 !== '0'">&nbsp;|&nbsp;{{ school.is985 }}</span>
+              <span v-if="school.is211 !== '0'">&nbsp;|&nbsp;{{ school.is211 }}</span>
             </div>
           </el-card>
         </li>
       </ul>
-      <el-pagination layout="prev, pager, next, jumper" @current-change="currentChange" :current-page="pageNum"
-        :page-size="pageSize" :total="total" />
+      <el-pagination
+        v-model:current-page="pageNum"
+        v-model:page-size="pageSize"
+        :total="total"
+        layout="prev, pager, next, jumper"
+        @update:current-page="currentChange"
+        @update:page-size="sizeChange"
+      />
     </div>
   </div>
 </template>
@@ -50,6 +57,11 @@
 import { ref, computed } from "vue";
 import request from "../utils/request.js";
 import { ElMessage } from "element-plus";
+
+const pageNum = ref(1);
+const pageSize = ref(10);
+const total = ref(0);
+const pageSchoolList = ref([]);
 export default {
   setup() {
     const schoolName = ref("");
@@ -73,43 +85,22 @@ export default {
       };
     });
 
-
-
-    //前端完成分页
-    // const pageNum = ref(1);
-    // const pageSize = ref(10);
-    // const total = computed(() => {
-    //   return schoolList.value.length;
-    // });
-    // const pageSchoolList = computed(() => {
-    //   return schoolList.value.slice(
-    //     (pageNum.value - 1) * pageSize.value,
-    //     pageNum.value * pageSize.value
-    //   );
-    // });
-    // const currentChange = (val) => {
-    //   pageNum.value = val;
-    // };
-
-    //配合后端进行分页
-    const pageNum = ref(1);
-    const pageSize = 10;
-    const total = ref(0);
     const currentChange = (val) => {
       pageNum.value = val;
       getSchoolList();
     };
-    const pageSchoolList = ref([]);
-
-    //学校列表
-    // const schoolList = ref([]);
+    const sizeChange = (val) => {
+      pageSize.value = val;
+      getSchoolList();
+    }
     const getSchoolList = () => {
       request
-        .post("/getSchoolList", query.value)
+        .get("/schoolInfo?page=" + pageNum.value)
         .then((res) => {
-          if (res.code == 200) {
-            pageSchoolList.value = res.data;
-            total.value = res.page_total;
+          if (res.code == 20000) {
+            pageSchoolList.value = res.data.schools;
+            total.value = res.data.total;
+            console.log(total.value);
             ElMessage.success("获取学校列表成功");
           } else {
             ElMessage.error({
@@ -131,13 +122,13 @@ export default {
       schoolName,
       schoolClass,
       query,
-      // schoolList,
-      getSchoolList,
       pageNum,
       pageSize,
       total,
       pageSchoolList,
+      getSchoolList,
       currentChange,
+      sizeChange,
       handleSearch,
     };
   },
@@ -197,9 +188,6 @@ li {
   border-radius: 20px;
 }
 
-/* .el-card__body {
-  margin: 40px auto;
-} */
 .school-image {
   float: left;
   /* size: auto; */

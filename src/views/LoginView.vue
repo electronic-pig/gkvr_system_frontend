@@ -70,12 +70,8 @@ export default {
         if (valid) {
           request
             .post("/user/login", form)
-            //.get("http://localhost:8080/user", form)
             .then((res) => {
-              // console.log(res);
-              // 存token setItem(key,value)
               if (res.code == 20000) {
-                //sessionStorage.setItem(token, res.data.token);
                 ElMessage.success("登录成功");
                 router.push("/home");
                 localStorage.setItem("ms_username", form.username);
