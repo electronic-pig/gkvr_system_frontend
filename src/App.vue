@@ -6,9 +6,10 @@
 
 export default {
   name: 'App',
-  components: {
-
+  created(){
+    document.title = '高考志愿推荐系统';
   }
+
 }
 </script>
 

@@ -1,6 +1,6 @@
 import {
   createRouter,
-  createWebHashHistory
+  createWebHistory
 } from 'vue-router'
 
 // import store from '../store/index.js'
@@ -64,8 +64,7 @@ const routes = [{
 ]
 
 const router = createRouter({
-  history: createWebHashHistory(),
-  //mode: 'history',
+  history: createWebHistory(),
   routes
 })
 
