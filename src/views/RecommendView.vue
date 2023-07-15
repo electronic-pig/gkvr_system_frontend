@@ -1,7 +1,8 @@
 <template>
   <div class="recommend-wrap">
     <div class="form-box">
-      <el-form :model="form" :rules="rules" label-width="80px" class="ms-content" label-position="left" hide-required-asterisk>
+      <el-form :model="form" :rules="rules" label-width="80px" class="ms-content" label-position="left"
+        hide-required-asterisk>
         <div class="type-box">
           <el-form-item label="科类" class="kelei-item">
             <el-radio-group v-model="form.kelei" class="kelei-group" @change="handleSearch">
@@ -52,20 +53,21 @@
         <li v-for="school in pageSchoolList" :key="school.id">
           <el-card shadow="hover" body-style="">
             <div class="school-image">
-              <img :src="
-                'https://static-data.gaokao.cn/upload/logo/' +
+              <img :src="'https://static-data.gaokao.cn/upload/logo/' +
                 school.id +
                 '.jpg'
-              " width="100px" height="100px" alt />
+                " width="100px" height="100px" alt />
             </div>
             <div class="school-detail">
-              <router-link :to="{path: '/detail', query:{id: school.id}}" target="_blank">
-              <p>{{ school.name }}</p>
+              <router-link :to="{ path: '/detail', query: { id: school.id } }" target="_blank">
+                <p>{{ school.name }}</p>
               </router-link>
               <span>{{ school.level }}</span>
               <span>&nbsp;&nbsp;最低分：{{ school.score }}</span>
               <span>&nbsp;&nbsp;预测投档线：{{ school.predict }}</span>
-              <span>&nbsp;&nbsp;上线率：&nbsp;&nbsp;<el-icon size="20px" :color="school.possible < 25 ?'#FF0000':school.possible>60?'#409eff':'#21c133'">{{ school.possible == 0? '<25' : school.possible }}%</el-icon></span>
+              <span>&nbsp;&nbsp;上线率：&nbsp;&nbsp;<el-icon size="20px"
+                  :color="school.possible < 25 ? '#FF0000' : school.possible > 60 ? '#409eff' : '#21c133'">{{ school.possible == 0 ?
+                    '<25' : school.possible }}%</el-icon></span>
             </div>
             <el-button class="add-button" @click="handleAddSelect(school.id, school.possible)">
               +志愿表
@@ -137,7 +139,7 @@ export default {
     const handleAddSelect = (id, possible) => {
       request
         .post('/addselect', {
-          username: localStorage.getItem("ms_username"), 
+          username: localStorage.getItem("ms_username"),
           id: id,
           possible: possible
         })
@@ -262,7 +264,6 @@ export default {
 </script>
 
 <style scoped>
-
 .recommend-wrap {
   margin: auto;
   text-align: center;
@@ -277,14 +278,17 @@ export default {
   display: flex;
   align-items: center;
 }
-.type-box > *{
+
+.type-box>* {
   margin-right: 20px
 }
+
 .el-form {
   display: flex;
   flex-direction: column;
 }
-.el-form>*{
+
+.el-form>* {
   margin: 10px;
 }
 
@@ -294,18 +298,13 @@ export default {
   margin-bottom: 0;
 }
 
-.el-form-item .kelei{
+.el-form-item .kelei {
   display: flex;
   flex-direction: row;
   align-items: center;
   margin-bottom: 0;
 }
 
-
-
-/* .el-input {
-  width: 30%; 
-} */
 
 .search-button {
   margin: auto 20px;
@@ -316,10 +315,12 @@ export default {
   flex-direction: row;
   margin-top: 0;
 }
+
 .kelei-group {
   /* width: 70%; */
   margin: 0;
 }
+
 .province-radio {
   width: 80px;
   margin: 5px;
@@ -365,8 +366,9 @@ img {
 }
 
 a {
-  text-decoration:none;
+  text-decoration: none;
 }
+
 a:link {
   /*默认状态*/
   color: black;
@@ -379,7 +381,8 @@ a:visited {
 
 a:hover {
   /*悬浮状态*/
-  color: #409eff;;
+  color: #409eff;
+  ;
 }
 
 p {
@@ -388,5 +391,4 @@ p {
 
 .el-pagination {
   justify-content: center;
-}
-</style>
+}</style>

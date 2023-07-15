@@ -28,6 +28,11 @@ import request from "../utils/request.js";
 export default {
   name: "RegisterDialog",
   setup() {
+    const store = useStore();
+    const dialogFormVisible = computed(() => store.state.showRegisterDialog);
+    const closeDialog = () => {
+      store.commit("closeRegisterDialog");
+    };
     const formLabelWidth = "140px";
     const rules = {
       username: [{ required: true, message: "请输入用户名", trigger: "blur" }],
@@ -43,24 +48,28 @@ export default {
     });
     const register = ref(null);
     const handleRegister = () => {
+      if(form.password!=form.checkPassword){
+        ElMessage.error("两次密码输入不一致");
+        return;
+      }
+      if(form.password.length < 6){
+        ElMessage.error("密码长度太短");
+        return;
+      }
       register.value.validate((valid) => {
         if (valid) {
           request
-            .post("/register", {
+            .post("/user/register", {
               username: form.username,
               password: form.password
             })
             .then((res) => {
-              // console.log(res);
-              // 存token setItem(key,value)
-              if (res.code == 200) {
-                //sessionStorage.setItem(token, res.data.token);
+              if (res.code == 20000) {
                 ElMessage.success("注册成功！");
                 store.commit("closeRegisterDialog");
               } else {
-
                 ElMessage.error({
-                  // title: "错误",
+                  title: "错误",
                   message: '注册失败:' + res.message,
                 });
               }
@@ -68,7 +77,6 @@ export default {
             .catch((err) => {
               ElMessage.error({
                 title: "错误",
-                //message: "服务器内部错误",
                 message: err.message
               });
             });
@@ -77,11 +85,6 @@ export default {
           return false;
         }
       });
-    };
-    const store = useStore();
-    const dialogFormVisible = computed(() => store.state.showRegisterDialog);
-    const closeDialog = () => {
-      store.commit("closeRegisterDialog");
     };
     return {
       dialogFormVisible,
