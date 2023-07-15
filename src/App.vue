@@ -1,5 +1,5 @@
 <template>
-<router-view></router-view>
+  <router-view></router-view>
 </template>
 
 <script>
@@ -7,7 +7,7 @@
 export default {
   name: 'App',
   components: {
-    
+
   }
 }
 </script>
@@ -20,6 +20,7 @@ body,
   padding: 0;
   /* height: 100%; */
 }
+
 html {
   overflow-y: scroll;
 }

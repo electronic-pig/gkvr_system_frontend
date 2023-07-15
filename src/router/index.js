@@ -70,19 +70,19 @@ const router = createRouter({
 })
 
 
-router.beforeEach((to, from, next) => { //全局钩子函数
-  to.meta.title && (document.title = to.meta.title);
-  if (to.path === '/login') {
-    next();
-  } else {
-    if (localStorage.getItem('ms_username') === null) {
-      alert("请登录！")
-      next('/login');
-    } else {
-      // next('/login');
-      next();
-    }
-  }
-});
+// router.beforeEach((to, from, next) => { //全局钩子函数
+//   to.meta.title && (document.title = to.meta.title);
+//   if (to.path === '/login') {
+//     next();
+//   } else {
+//     if (localStorage.getItem('ms_username') === null) {
+//       alert("请登录！")
+//       next('/login');
+//     } else {
+//       // next('/login');
+//       next();
+//     }
+//   }
+// });
 
 export default router
