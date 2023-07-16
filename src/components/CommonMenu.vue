@@ -104,7 +104,7 @@ export default {
 </script>
 <style scoped>
 b {
-  color: #409EFF;
+  color: #f5940c;
 }
 
 .common-menu {

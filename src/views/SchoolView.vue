@@ -4,57 +4,69 @@
       <div class="search-box">
         <el-input v-model="schoolName" placeholder="输入学校名称" class="handle-input mr10"
           @keyup.enter="handleSearch"></el-input>
-        <el-button type="primary" class="search-button" @click="handleSearch"><el-icon>
+        <el-button type="primary" class="search-button" @click="handleSearch">
+          <el-icon>
             <Search />
           </el-icon>搜索</el-button>
       </div>
-      <el-radio-group v-model="schoolClass" size="large" @change="handleSearch">
+      <el-radio-group v-model="schoolClass" size="large" @change="getSchoolList">
         <el-radio-button label="全部" />
         <el-radio-button label="985" />
         <el-radio-button label="211" />
         <el-radio-button label="双一流" />
-        <el-radio-button label="其它" />
       </el-radio-group>
     </div>
-    <div class="school-list-wrap">
-      <ul>
-        <li v-for="school in pageSchoolList" :key="school.schoolId">
-          <el-card shadow="hover">
-            <div class="school-image">
-              <img :src="'https://static-data.gaokao.cn/upload/logo/' + school.schoolId + '.jpg'" width="100px"
-                height="100px" alt />
+    <div class="school-list-container">
+      <div class="school-list-wrap">
+        <ul>
+          <li v-for="school in pageSchoolList" :key="school.schoolId">
+            <el-card shadow="hover">
+              <div class="school-image">
+                <img :src="'https://static-data.gaokao.cn/upload/logo/' + school.schoolId + '.jpg'" width="100px"
+                  height="100px" alt />
+              </div>
+              <div class="school-detail">
+                <router-link :to="{ path: '/detail', query: { id: school.schoolId } }" target="_blank">
+                  <p>{{ school.schoolName }}</p>
+                </router-link>
+                <span v-if="school.degree">{{ school.degree }}</span>
+                <span v-if="school.schoolType">&nbsp;|&nbsp;{{ school.schoolType }}</span>
+                <span v-if="school.owner">&nbsp;|&nbsp;{{ school.owner }}</span>
+                <span v-if="school.provinceName">&nbsp;|&nbsp;{{ school.provinceName }}</span>
+                <span v-if="school.cityName">&nbsp;|&nbsp;{{ school.cityName }}</span>
+                <span v-if="school.countyName">&nbsp;|&nbsp;{{ school.countyName }}</span>
+                <span v-if="school.doublehigh">&nbsp;|&nbsp;{{ school.doublehigh }}</span>
+                <span v-if="school.is985 !== '0'">&nbsp;|&nbsp;{{ school.is985 }}</span>
+                <span v-if="school.is211 !== '0'">&nbsp;|&nbsp;{{ school.is211 }}</span>
+              </div>
+            </el-card>
+          </li>
+        </ul>
+        <el-pagination v-model:current-page="pageNum" v-model:page-size="pageSize" :total="total"
+          layout="prev, pager, next, jumper" @current-page="currentChange" @page-size="sizeChange" />
+      </div>
+      <el-card class="heat-rank" style="height: max-content;">
+        <template #header>
+          <h1>院校热度</h1>
+        </template>
+        <ul>
+          <li v-for="(item, index) in RankList" :key="index" class="heat-item">
+            <p>{{ index + 1 }}</p>
+            <div class="school-info">
+              <span class="school-name">{{ item.school }}</span>
             </div>
-            <div class="school-detail">
-              <router-link :to="{ path: '/detail', query: { id: school.schoolId } }" target="_blank">
-                <p>{{ school.schoolName }}</p>
-              </router-link>
-              <span v-if="school.degree">{{ school.degree }}</span>
-              <span v-if="school.schoolType">&nbsp;|&nbsp;{{ school.schoolType }}</span>
-              <span v-if="school.owner">&nbsp;|&nbsp;{{ school.owner }}</span>
-              <span v-if="school.provinceName">&nbsp;|&nbsp;{{ school.provinceName }}</span>
-              <span v-if="school.cityName">&nbsp;|&nbsp;{{ school.cityName }}</span>
-              <span v-if="school.countyName">&nbsp;|&nbsp;{{ school.countyName }}</span>
-              <span v-if="school.doublehigh">&nbsp;|&nbsp;{{ school.doublehigh }}</span>
-              <span v-if="school.is985 !== '0'">&nbsp;|&nbsp;{{ school.is985 }}</span>
-              <span v-if="school.is211 !== '0'">&nbsp;|&nbsp;{{ school.is211 }}</span>
+            <div class="heat-info">
+              <span class="heat-value">{{ item.heat }}</span>
             </div>
-          </el-card>
-        </li>
-      </ul>
-      <el-pagination
-        v-model:current-page="pageNum"
-        v-model:page-size="pageSize"
-        :total="total"
-        layout="prev, pager, next, jumper"
-        @update:current-page="currentChange"
-        @update:page-size="sizeChange"
-      />
+          </li>
+        </ul>
+      </el-card>
     </div>
   </div>
 </template>
 
 <script>
-import { ref, computed } from "vue";
+import { ref } from "vue";
 import request from "../utils/request.js";
 import { ElMessage } from "element-plus";
 
@@ -62,46 +74,94 @@ const pageNum = ref(1);
 const pageSize = ref(10);
 const total = ref(0);
 const pageSchoolList = ref([]);
+const schoolName = ref("");
+const schoolClass = ref("全部");
+const province_id = ref("");
+const school_type_mark = ref("");
+const owner_mark = ref("");
+const is985 = ref("");
+const is211 = ref("");
+const doublehigh_mark = ref("");
+const RankList = ref([
+  { school: '四川大学', heat: 185637 },
+  { school: '清华大学', heat: 170105 },
+  { school: '中山大学', heat: 147029 },
+  { school: '厦门大学', heat: 146616 },
+  { school: '中南大学', heat: 145881 },
+  { school: '深圳大学', heat: 140280 },
+  { school: '浙江大学', heat: 139583 },
+  { school: '武汉大学', heat: 130105 },
+  { school: '西南大学', heat: 124058 },
+]);
 export default {
+  watch: {
+    pageNum() {
+      this.getSchoolList();
+    },
+    schoolClass() {
+      switch (schoolClass.value) {
+        case "全部":
+          pageNum.value = 1;
+          is985.value = "";
+          is211.value = "";
+          doublehigh_mark.value = "";
+          this.getSchoolList();
+          break;
+        case "985":
+          pageNum.value = 1;
+          is985.value = "985";
+          is211.value = "";
+          doublehigh_mark.value = "";
+          this.getSchoolList();
+          break;
+        case "211":
+          pageNum.value = 1;
+          is985.value = "";
+          is211.value = "211";
+          doublehigh_mark.value = "";
+          this.getSchoolList();
+          break;
+        case "双一流":
+          pageNum.value = 1;
+          is985.value = "";
+          is211.value = "";
+          doublehigh_mark.value = "38000";
+          this.getSchoolList();
+          break;
+      }
+    },
+  },
   setup() {
-    const schoolName = ref("");
-    const schoolClass = ref("全部");
-    //构造post请求Body
-    const query = computed(() => {
-      const classMap = {
-        "": -1,
-        全部: -1,
-        985: 3,
-        211: 2,
-        双一流: 1,
-        其它: 0,
-      };
-      return {
-        province: "",
-        school_name: schoolName.value,
-        school_class: classMap[schoolClass.value],
-        page_size: pageSize,
-        page_index: pageNum.value - 1,
-      };
-    });
-
-    const currentChange = (val) => {
-      pageNum.value = val;
-      getSchoolList();
-    };
-    const sizeChange = (val) => {
-      pageSize.value = val;
-      getSchoolList();
-    }
     const getSchoolList = () => {
       request
-        .get("/schoolInfo?page=" + pageNum.value)
+        .get("/schoolInfo/search?page=" + pageNum.value + "&province_id=" + province_id.value
+          + "&school_type_mark=" + school_type_mark.value + "&owner_mark=" + owner_mark.value
+          + "&is985=" + is985.value + "&is211=" + is211.value + "&doublehigh_mark=" + doublehigh_mark.value)
         .then((res) => {
           if (res.code == 20000) {
             pageSchoolList.value = res.data.schools;
             total.value = res.data.total;
+          } else {
+            ElMessage.error({
+              message: "获取失败:" + res.message,
+            });
+          }
+        })
+        .catch((err) => {
+          ElMessage.error({
+            message: "服务器错误：" + err,
+          });
+        });
+    };
+    const handleSearch = () => {
+      request
+        .get("/schoolInfo/searchByName?schoolName=" + schoolName.value)
+        .then((res) => {
+          if (res.code == 20000) {
+            pageSchoolList.value = res.data.schoolInfo;
+            total.value = res.data.total;
             console.log(total.value);
-            ElMessage.success("获取学校列表成功");
+            ElMessage.success("获取成功");
           } else {
             ElMessage.error({
               message: "获取失败:" + res.message,
@@ -115,21 +175,22 @@ export default {
         });
     };
     getSchoolList();
-
-    const handleSearch = () => getSchoolList();
-
     return {
-      schoolName,
-      schoolClass,
-      query,
       pageNum,
       pageSize,
       total,
       pageSchoolList,
+      schoolName,
+      schoolClass,
+      province_id,
+      school_type_mark,
+      owner_mark,
+      is985,
+      is211,
+      doublehigh_mark,
+      RankList,
       getSchoolList,
-      currentChange,
-      sizeChange,
-      handleSearch,
+      handleSearch
     };
   },
 };
@@ -152,7 +213,7 @@ export default {
 
 .search-box {
   display: flex;
-  justify-content: start;
+  justify-content: flex-start;
   width: 50%;
 }
 
@@ -171,7 +232,13 @@ export default {
 
 .school-list-wrap {
   height: 100%;
+  flex: 1;
 }
+
+.school-list-container {
+  display: flex;
+}
+
 
 ul {
   justify-content: center;
@@ -188,6 +255,11 @@ li {
   border-radius: 20px;
 }
 
+.el-card:hover {
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
+  background-color: #edeff1;
+}
+
 .school-image {
   float: left;
   /* size: auto; */
@@ -201,6 +273,10 @@ img {
 
 .school-detial {
   float: left;
+}
+
+h1 {
+  font-size: 30px;
 }
 
 p {
@@ -228,5 +304,54 @@ a:hover {
 
 .el-pagination {
   justify-content: center;
+}
+
+.heat-rank {
+  flex: 0 0 300px;
+  /* 设置热度排行榜宽度 */
+  margin-left: 20px;
+  padding: 10px;
+
+}
+
+.heat-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 20px 0;
+  /* 调整条目之间的垂直间距 */
+}
+
+.heat-item {
+  display: flex;
+  font-size: 25px;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.school-info {
+  flex-grow: 1;
+}
+
+.school-name {
+  font-weight: bold;
+}
+
+.heat-info {
+  margin-left: 20px;
+}
+
+.school-name {
+  font-weight: bold;
+}
+
+.heat-value {
+  color: rgb(237, 33, 33);
+}
+
+.school-info:hover {
+  color: #f5940c;
+  cursor: pointer;
 }
 </style>

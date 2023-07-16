@@ -113,7 +113,7 @@ export default {
   position: absolute;
   width: 100%;
   height: 100%;
-  background-image: url(../assets/login-bg.jpg);
+  background-image: url(../assets/login-bg4.jpg);
   background-size: 100%;
   animation: slide-bottom 0.5s cubic-bezier(0.215, 0.610, 0.355, 1.000) both;
 }

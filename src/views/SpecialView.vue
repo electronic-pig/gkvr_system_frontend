@@ -287,7 +287,7 @@ export default {
 }
 .search-box {
   display: flex;
-  justify-content: start;
+  justify-content: flex-start;
   width: 50%;
 }
 .el-input {
