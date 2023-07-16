@@ -51,7 +51,10 @@
         </template>
         <ul>
           <li v-for="(item, index) in RankList" :key="index" class="heat-item">
-            <p>{{ index + 1 }}</p>
+            <span v-if="index == 0" class="badge1">{{ index + 1 }}</span>
+            <span v-if="index == 1" class="badge2">{{ index + 1 }}</span>
+            <span v-if="index == 2" class="badge3">{{ index + 1 }}</span>
+            <span v-if="index !== 0 & index !== 1 & index !== 2" class="badgeElse">{{ index + 1 }}</span>
             <div class="school-info">
               <span class="school-name">{{ item.school }}</span>
             </div>
@@ -257,7 +260,7 @@ li {
 
 .el-card:hover {
   box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.2);
-  background-color: #edeff1;
+  background-color: rgb(250, 250, 250);
 }
 
 .school-image {
@@ -326,8 +329,9 @@ a:hover {
   font-size: 25px;
   justify-content: space-between;
   align-items: center;
-  margin-top: 10px;
-  margin-bottom: 10px;
+  margin-top: 22px;
+  margin-bottom: 22px;
+  cursor: pointer;
 }
 
 .school-info {
@@ -354,4 +358,56 @@ a:hover {
   color: #f5940c;
   cursor: pointer;
 }
-</style>
+
+.badge1 {
+  width: 20px;
+  height: 20px;
+  font-size: 15px;
+  color: #fff;
+  background: #da1d1d;
+  text-align: center;
+  line-height: 20px;
+  overflow: hidden;
+  font-weight: normal;
+  margin-top: 1px;
+  margin-right: 3px;
+}
+
+.badge2 {
+  width: 20px;
+  height: 20px;
+  font-size: 15px;
+  color: #fff;
+  background: #fc6639;
+  text-align: center;
+  line-height: 20px;
+  overflow: hidden;
+  font-weight: normal;
+  margin-right: 3px;
+}
+
+.badge3 {
+  width: 20px;
+  height: 20px;
+  font-size: 15px;
+  color: #fff;
+  background: #f6b759;
+  text-align: center;
+  line-height: 20px;
+  overflow: hidden;
+  font-weight: normal;
+  margin-right: 3px;
+}
+
+.badgeElse {
+  width: 20px;
+  height: 20px;
+  font-size: 15px;
+  color: #999999;
+  background: #eeeeee;
+  text-align: center;
+  line-height: 20px;
+  overflow: hidden;
+  font-weight: normal;
+  margin-right: 3px;
+}</style>
