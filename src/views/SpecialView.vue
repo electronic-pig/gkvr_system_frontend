@@ -1,27 +1,22 @@
 <template>
   <div class="special-wrap">
     <div class="search-header">
-    <div class="search-box">
-      <el-input
-        v-model="specialName"
-        placeholder="输入专业名称"
-        class="handle-input mr10"
-        @keyup.enter="handleSearch"
-      ></el-input>
-      <el-button type="primary" class="search-button" @click="handleSearch"
-        ><el-icon><Search /></el-icon>搜索</el-button
-      >
-      
+      <div class="search-box">
+        <el-input v-model="specialName" placeholder="输入专业名称" class="handle-input mr10"
+          @keyup.enter="handleSearch"></el-input>
+        <el-button type="primary" class="search-button" @click="handleSearch"><el-icon>
+            <Search />
+          </el-icon>搜索</el-button>
+      </div>
+      <el-radio-group v-model="specialLevel" size="large" @change="handleSearch">
+        <el-radio-button label="本科" />
+        <el-radio-button label="专科（高职）" />
+      </el-radio-group>
     </div>
-    <el-radio-group v-model="specialLevel" size="large" @change="handleSearch">
-      <el-radio-button label="本科" />
-      <el-radio-button label="专科（高职）" />
-    </el-radio-group>
-    </div>
-    
+
     <el-radio-group v-model="specialClass" size="large" @change="handleSearch">
       <el-radio label="全部" />
-      <el-radio v-for="clas in classList" :key="clas.id" :label="clas.name"/>
+      <el-radio v-for="clas in classList" :key="clas.id" :label="clas.name" />
     </el-radio-group>
     <div class="special-list-wrap">
       <ul>
@@ -33,13 +28,8 @@
           </el-card>
         </li>
       </ul>
-      <el-pagination
-        layout="prev, pager, next, jumper"
-        @current-change="currentChange"
-        :current-page="pageNum"
-        :page-size="pageSize"
-        :total="total"
-      />
+      <el-pagination layout="prev, pager, next, jumper" @current-change="currentChange" :current-page="pageNum"
+        :page-size="pageSize" :total="total" />
     </div>
   </div>
 </template>
@@ -182,7 +172,7 @@ export default {
           name: '公共管理与服务大类',
         },
       ];
-      if(specialLevel.value == "专科（高职）") {
+      if (specialLevel.value == "专科（高职）") {
         return zhuanList;
       } else {
         return benList;
@@ -193,7 +183,7 @@ export default {
       return {
         name: specialName.value,
         level: specialLevel.value,
-        class: specialClass.value == '全部'? '' : specialClass.value,
+        class: specialClass.value == '全部' ? '' : specialClass.value,
         page_size: pageSize,
         page_index: pageNum.value - 1,
       };
@@ -278,6 +268,7 @@ export default {
   text-align: center;
   height: 100%;
 }
+
 .search-header {
   display: flex;
   justify-content: space-evenly;
@@ -285,46 +276,56 @@ export default {
   margin: 40px auto;
   height: 40px;
 }
+
 .search-box {
   display: flex;
   justify-content: flex-start;
   width: 50%;
 }
+
 .el-input {
   width: auto;
 }
+
 .search-button {
   margin: 0;
   height: 40px;
 }
+
 .search-box>.el-radio-group {
   margin: 0 40px;
 }
+
 .special-list-wrap {
   height: 100%;
 }
+
 ul {
   justify-content: center;
   padding-inline-start: 0;
 }
+
 li {
   list-style-type: none;
 }
+
 .el-card {
   margin: 20px auto;
   height: 100px;
   border-radius: 20px;
 }
+
 /* .el-card__body {
   margin: 40px auto;
 } */
 .special-detial {
   float: left;
 }
+
 p {
   font-size: large;
 }
+
 .el-pagination {
   justify-content: center;
-}
-</style>
+}</style>

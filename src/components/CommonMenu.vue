@@ -2,8 +2,7 @@
   <div class="common-menu">
     <div class="menu-wrap">
       <el-menu :default-active="onRoutes" class="el-menu" mode="horizontal" :ellipsis="false" background-color="#FFFFFF"
-        router>
-        <!--:default-active="activeIndex"-->
+         @select="handleSelect">
         <el-menu-item v-for="item in menu" :index="item.path" :key="item.path">
           <template v-slot:title>
             <span>{{ item.lable }}</span>
@@ -37,7 +36,8 @@
   </div>
 </template>
 <script>
-import { useRoute, useRouter } from "vue-router";
+import { useRoute } from "vue-router";
+import router from '@/router'
 import { useStore } from "vuex";
 import { computed } from "vue";
 export default {
@@ -65,11 +65,10 @@ export default {
         url: "/home/recommend",
       },
     ];
-    //const router = useRouter();
-    const clickMenu = () => {
-      // router.push({
-      //   path: '/home/' + item.name,
-      // });
+    // const router = useRouter();
+    const handleSelect = (index) => {
+      console.log(index);
+      router.push(index);
     };
     const route = useRoute();
     const onRoutes = computed(() => {
@@ -80,7 +79,7 @@ export default {
       name: localStorage.getItem("ms_username"),
       balance: 20,
     };
-    const router = useRouter();
+    // const router = useRouter();
     const handleCommand = (command) => {
       if (command == "loginout") {
         localStorage.removeItem("ms_username");
@@ -93,11 +92,11 @@ export default {
     };
     return {
       menu,
-      clickMenu,
+      handleSelect,
       userData,
       onRoutes,
       handleCommand,
-      clickSelect
+      clickSelect,
     };
   },
 };

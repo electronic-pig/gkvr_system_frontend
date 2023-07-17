@@ -26,7 +26,7 @@
                   height="100px" alt />
               </div>
               <div class="school-detail">
-                <router-link :to="{ path: '/detail', query: { id: school.schoolId } }" target="_blank">
+                <router-link :to="{ path: '/schoolDetail', query: { schoolId: school.schoolId } }" target="_blank">
                   <p>{{ school.schoolName }}</p>
                 </router-link>
                 <span v-if="school.degree">{{ school.degree }}</span>
@@ -242,7 +242,6 @@ export default {
   display: flex;
 }
 
-
 ul {
   justify-content: center;
   padding-inline-start: 0;
@@ -302,7 +301,7 @@ a:visited {
 
 a:hover {
   /*悬浮状态*/
-  color: #409eff;
+  color: #f5940c;
 }
 
 .el-pagination {
@@ -314,7 +313,6 @@ a:hover {
   /* 设置热度排行榜宽度 */
   margin-left: 20px;
   padding: 10px;
-
 }
 
 .heat-list {

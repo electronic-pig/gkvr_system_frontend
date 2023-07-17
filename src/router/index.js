@@ -1,7 +1,4 @@
-import {
-  createRouter,
-  createWebHistory
-} from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 
 // import store from '../store/index.js'
 
@@ -25,44 +22,29 @@ const routes = [{
     path: 'school',
     name: 'school',
     component: () => import('../views/SchoolView.vue'),
-    meta: {
-      need2Login: 1,
-      title: '学校查询|高考推荐数据库'
-    }
   },
   {
     path: 'special',
     name: 'special',
     component: () => import('../views/SpecialView.vue'),
-    meta: {
-      need2Login: 1,
-      title: '专业查询|高考推荐数据库'
-    }
   },
   {
     path: 'recommend',
     name: 'recommend',
     component: () => import('../views/RecommendView.vue'),
-    meta: {
-      need2Login: 1,
-      title: '报考推荐|高考推荐数据库'
-    }
   },
   ]
 },
 {
-  path: '/detail',
-  name: 'detail',
+  path: '/schoolDetail',
+  name: 'schoolDetail',
   component: () => import('../views/SchoolDetailView.vue'),
-  meta: {
-    title: '学校详情|高考推荐数据库'
-  }
 },
 ]
 
 const router = createRouter({
   history: createWebHistory(),
-  routes
+  routes,
 })
 
 

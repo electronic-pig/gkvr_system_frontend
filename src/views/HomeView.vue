@@ -2,11 +2,11 @@
   <div class="tabs">
     <!-- Active tab -->
     <div class="tabs__tab--active">
-       <br/>
+      <br />
     </div>
     <!-- Inactive tab -->
     <div class="tabs__tab--inactive">
-      <br/>
+      <br />
     </div>
   </div>
   <el-container>
@@ -24,12 +24,12 @@
 import CommonMenu from "../components/CommonMenu.vue";
 import SelectDialog from "../components/SelectDialog.vue"
 export default {
-    components: {
-      CommonMenu,
-      SelectDialog,
-    },
-    setup() {
-    }
+  components: {
+    CommonMenu,
+    SelectDialog,
+  },
+  setup() {
+  }
 }
 </script>
 
@@ -39,17 +39,19 @@ export default {
   margin: auto;
   height: 100%;
 }
+
 .el-header {
   padding: 0 !important;
   /* display:inline-block; */
   text-align: center;
 }
+
 .el-main {
   padding: 0 !important;
   /* height: calc(100%-50px); */
   height: 100%;
   overflow-x: hidden;
   overflow-y: hidden;
-  flex-grow:1;
+  flex-grow: 1;
 }
 </style>
