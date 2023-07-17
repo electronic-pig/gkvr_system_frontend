@@ -1,6 +1,4 @@
-import {
-  createStore
-} from 'vuex'
+import { createStore } from 'vuex'
 
 export default createStore({
   state: {
@@ -8,7 +6,6 @@ export default createStore({
     showSelectDialog: false,
     isLogin: '',
   },
-  getters: {},
   mutations: {
     showRegisterDialog(state) {
       state.showRegisterDialog = true;
@@ -23,6 +20,7 @@ export default createStore({
       state.showSelectDialog = false;
     }
   },
+  getters: {},
   actions: {},
   modules: {}
 })

@@ -1,11 +1,6 @@
 <template>
-  <div class="tabs">
-    <div class="tabs__tab--active">
-      <br />
-    </div>
-    <div class="tabs__tab--inactive">
-      <br />
-    </div>
+  <div>
+    <br />
   </div>
   <el-container>
     <el-header>

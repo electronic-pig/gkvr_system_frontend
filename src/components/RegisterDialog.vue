@@ -1,13 +1,14 @@
 <template>
-  <el-dialog v-model="dialogFormVisible" :append-to-body="false" title="注册" width="30%" @closed="closeDialog()">
+  <el-dialog v-model="dialogFormVisible" :append-to-body="false" title="注册" width="30%" @closed="closeDialog()"
+    style="border-radius: 10px;">
     <el-form ref="register" :rules="rules" :model="form">
-      <el-form-item prop="username" label="用户名" :label-width="formLabelWidth">
+      <el-form-item prop="username" label="用户名" :label-width="140">
         <el-input v-model="form.username" placeholder="请输入用户名" autocomplete="off" />
       </el-form-item>
-      <el-form-item prop="password" label="密码" :label-width="formLabelWidth">
+      <el-form-item prop="password" label="密码" :label-width="140">
         <el-input type="password" v-model="form.password" placeholder="请输入密码" autocomplete="off" />
       </el-form-item>
-      <el-form-item prop="checkPassword" label="重复密码" :label-width="formLabelWidth" @keyup.enter="handleRegister()">
+      <el-form-item prop="checkPassword" label="重复密码" :label-width="140" @keyup.enter="handleRegister()">
         <el-input type="password" v-model="form.checkPassword" placeholder="请再次输入密码" autocomplete="off" />
       </el-form-item>
     </el-form>
@@ -29,17 +30,14 @@ export default {
   name: "RegisterDialog",
   setup() {
     const store = useStore();
-    const dialogFormVisible = computed(() => store.state.showRegisterDialog);
     const closeDialog = () => {
       store.commit("closeRegisterDialog");
     };
-    const formLabelWidth = "140px";
+    const dialogFormVisible = computed(() => store.state.showRegisterDialog);
     const rules = {
       username: [{ required: true, message: "请输入用户名", trigger: "blur" }],
       password: [{ required: true, message: "请输入密码", trigger: "blur" }],
-      checkPassword: [
-        { required: true, message: "请输入校验密码", trigger: "blur" },
-      ],
+      checkPassword: [{ required: true, message: "请输入校验密码", trigger: "blur" }],
     };
     const form = reactive({
       username: "",
@@ -48,11 +46,11 @@ export default {
     });
     const register = ref(null);
     const handleRegister = () => {
-      if(form.password!=form.checkPassword){
+      if (form.password != form.checkPassword) {
         ElMessage.error("两次密码输入不一致");
         return;
       }
-      if(form.password.length < 6){
+      if (form.password.length < 6) {
         ElMessage.error("密码长度太短");
         return;
       }
@@ -81,14 +79,13 @@ export default {
               });
             });
         } else {
-          ElMessage.error("登录失败");
+          ElMessage.error("注册失败");
           return false;
         }
       });
     };
     return {
       dialogFormVisible,
-      formLabelWidth,
       rules,
       form,
       register,

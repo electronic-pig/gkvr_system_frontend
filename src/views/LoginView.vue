@@ -2,7 +2,7 @@
   <div class="login-wrap">
     <div class="ms-login">
       <div class="ms-title">高考志愿推荐平台</div>
-      <el-form :model="form" :rules="rules" ref="login" label-width="0px" class="ms-content">
+      <el-form class="ms-content" :model="form" :rules="rules" ref="login" label-width="0px">
         <el-form-item prop="username">
           <el-input v-model="form.username" placeholder="用户名">
             <template #prepend>
@@ -22,10 +22,9 @@
           </el-input>
         </el-form-item>
         <div class="login-btn">
-          <el-button type="primary" @click="clickLogin()">登录</el-button>
+          <el-button type="primary" @click="handleLogin()">登录</el-button>
           <el-button type="primary" @click="clickRegister()">注册</el-button>
         </div>
-        <!-- <p class="login-tips">Tips : 用户名和密码随便填。</p> -->
       </el-form>
     </div>
   </div>
@@ -33,10 +32,10 @@
 </template>
 
 <script>
-import { useRouter } from "vue-router";
 import { reactive, ref } from "vue";
 import { ElMessage } from "element-plus";
 import { useStore } from "vuex"
+import router from '@/router'
 import request from "../utils/request.js";
 import RegisterDialog from "../components/RegisterDialog.vue"
 export default {
@@ -44,24 +43,17 @@ export default {
     RegisterDialog
   },
   setup() {
-    const router = useRouter();
+    //任意输入，用于测试
     const handleLogin = () => {
-      router.push({
-        name: "home",
-      });
+      router.push('/home');
+      localStorage.setItem("ms_username", "admin");
     };
     const form = reactive({
       username: "",
       password: "",
     });
     const rules = {
-      username: [
-        {
-          required: true,
-          message: "请输入用户名",
-          trigger: "blur",
-        },
-      ],
+      username: [{ required: true, message: "请输入用户名", trigger: "blur" }],
       password: [{ required: true, message: "请输入密码", trigger: "blur" }],
     };
     const login = ref(null);
@@ -97,11 +89,11 @@ export default {
       store.commit("showRegisterDialog");
     }
     return {
-      handleLogin,
       form,
       rules,
       login,
       clickLogin,
+      handleLogin,
       clickRegister
     };
   },
@@ -113,7 +105,7 @@ export default {
   position: absolute;
   width: 100%;
   height: 100%;
-  background-image: url(../assets/login-bg4.jpg);
+  background-image: url(../assets/login-bg.jpg);
   background-size: 100%;
   animation: slide-bottom 0.5s cubic-bezier(0.215, 0.610, 0.355, 1.000) both;
 }
@@ -133,7 +125,7 @@ export default {
   top: 60%;
   width: 350px;
   margin: -190px 0 0 -175px;
-  border-radius: 5px;
+  border-radius: 10px;
   background: rgba(255, 255, 255, 0.5);
   overflow: hidden;
   animation: slide-bottom-up 0.5s cubic-bezier(.64, 1.4, .49, .96) both;
@@ -159,12 +151,6 @@ export default {
   margin-bottom: 10px;
 }
 
-.login-tips {
-  font-size: 12px;
-  line-height: 30px;
-  color: #fff;
-}
-
 @keyframes slide-bottom {
   0% {
     transform: translateY(-500px);
@@ -183,4 +169,5 @@ export default {
   100% {
     transform: translateY(0px);
   }
-}</style>
+}
+</style>
