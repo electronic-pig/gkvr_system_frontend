@@ -2,9 +2,9 @@
   <div class="special-wrap">
     <div class="search-header">
       <div class="search-box">
-        <el-input v-model="specialName" placeholder="输入专业名称" class="handle-input mr10"
+        <el-input class="handle-input" v-model="specialName" placeholder="输入专业名称" 
           @keyup.enter="handleSearch"></el-input>
-        <el-button type="primary" class="search-button" @click="handleSearch"><el-icon>
+        <el-button class="search-button" type="primary"  @click="handleSearch"><el-icon>
             <Search />
           </el-icon>搜索</el-button>
       </div>
@@ -13,10 +13,9 @@
         <el-radio-button label="专科（高职）" />
       </el-radio-group>
     </div>
-
     <el-radio-group v-model="specialClass" size="large" @change="handleSearch">
       <el-radio label="全部" />
-      <el-radio v-for="clas in classList" :key="clas.id" :label="clas.name" />
+      <el-radio v-for="item in classList" :key="item.id" :label="item.name" />
     </el-radio-group>
     <div class="special-list-wrap">
       <ul>
@@ -28,21 +27,25 @@
           </el-card>
         </li>
       </ul>
-      <el-pagination layout="prev, pager, next, jumper" @current-change="currentChange" :current-page="pageNum"
-        :page-size="pageSize" :total="total" />
+      <el-pagination class="pagination" v-model:current-page="pageNum" v-model:page-size="pageSize" :total="total"
+          layout="prev, pager, next, jumper" @current-page="currentChange" @page-size="sizeChange" />
     </div>
   </div>
 </template>
 
 <script>
 import { ref, computed } from "vue";
-import request from "../utils/request.js";
 import { ElMessage } from "element-plus";
+import request from "../utils/request.js";
 export default {
   setup() {
     const specialName = ref("");
     const specialLevel = ref("本科");
     const specialClass = ref("全部")
+    const pageNum = ref(1);
+    const pageSize = 10;
+    const total = ref(0);
+    const pageSpecialList = ref([]);
     const classList = computed(() => {
       const benList = [
         {
@@ -188,43 +191,13 @@ export default {
         page_index: pageNum.value - 1,
       };
     });
-
-    //前端完成分页
-    // const pageNum = ref(1);
-    // const pageSize = ref(10);
-    // const total = computed(() => {
-    //   return specialList.value.length;
-    // });
-    // const pageSpecialList = computed(() => {
-    //   return specialList.value.slice(
-    //     (pageNum.value - 1) * pageSize.value,
-    //     pageNum.value * pageSize.value
-    //   );
-    // });
-    // const currentChange = (val) => {
-    //   pageNum.value = val;
-    // };
-
-    //配合后端进行分页
-    const pageNum = ref(1);
-    const pageSize = 10;
-    const total = ref(0);
-    const currentChange = (val) => {
-      pageNum.value = val;
-      getSpecialList();
-    };
-    const pageSpecialList = ref([]);
-
-    //学校列表
-    // const specialList = ref([]);
     const getSpecialList = () => {
       request
-        .post("/getSpecialList", form.value)
+        .get("/getSpecialList", form.value)
         .then((res) => {
           if (res.code == 200) {
             pageSpecialList.value = res.data;
             total.value = res.page_total;
-            //ElMessage.success("获取学校列表成功");
           } else {
             ElMessage.error({
               message: "获取失败:" + res.message,
@@ -240,20 +213,21 @@ export default {
     getSpecialList();
 
     const handleSearch = () => getSpecialList();
-
+    const currentChange = () => { };
+    const sizeChange = () => { };
     return {
       specialName,
       specialLevel,
       specialClass,
       classList,
       form,
-      // specialList,
-      getSpecialList,
       pageNum,
       pageSize,
       total,
       pageSpecialList,
+      getSpecialList,
       currentChange,
+      sizeChange,
       handleSearch,
     };
   },
@@ -262,8 +236,6 @@ export default {
 
 <style>
 .special-wrap {
-  /* display: flex;
-  flex-direction: column; */
   margin: auto;
   text-align: center;
   height: 100%;
@@ -283,7 +255,7 @@ export default {
   width: 50%;
 }
 
-.el-input {
+.handle-input {
   width: auto;
 }
 
@@ -315,9 +287,6 @@ li {
   border-radius: 20px;
 }
 
-/* .el-card__body {
-  margin: 40px auto;
-} */
 .special-detial {
   float: left;
 }
@@ -328,4 +297,5 @@ p {
 
 .el-pagination {
   justify-content: center;
-}</style>
+}
+</style>

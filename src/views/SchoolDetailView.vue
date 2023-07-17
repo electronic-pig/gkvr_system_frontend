@@ -94,17 +94,17 @@
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 import { ElMessage } from 'element-plus';
-import * as echarts from 'echarts'
 import request from "../utils/request.js";
+import * as echarts from 'echarts'
 export default {
   setup() {
-    const route = useRoute();
     let schoolId = route.query.schoolId;
+    const route = useRoute();
     const schoolInfo = ref({});
     const detail = ref({});
     const scLiScoreNew = ref({});
-    const majorScoreList = ref([]);
     const schoolInfoDetail = ref({});
+    const majorScoreList = ref([]);
     //获取学校详细信息
     const getSchoolDetail = () => {
       request
@@ -129,7 +129,7 @@ export default {
           });
         });
     };
-    //专业列表
+    
     const year = ref('2021');
     const type = ref('理科');
 
@@ -248,7 +248,7 @@ export default {
         },
         grid: {
           top: '18%',
-          left: '18%',//原来是10%，修改为20%
+          left: '18%',
           right: '2%',
           bottom: '3%'
         },
@@ -272,7 +272,6 @@ export default {
               return value;
             }
           },
-          //y轴线设置显示
           axisLine: {
             show: true
           },
@@ -286,7 +285,6 @@ export default {
         series: [{
           label: {
             show: true,
-            // rotate: 90,
             formatter: '{c}',
             fontSize: 16,
             color: 'white',
@@ -542,12 +540,12 @@ export default {
     return {
       type,
       year,
-      getSchoolDetail,
       scLiScoreNew,
       detail,
       schoolInfo,
       schoolInfoDetail,
       majorScoreList,
+      getSchoolDetail,
     }
 
   },

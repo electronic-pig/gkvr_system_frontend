@@ -2,7 +2,7 @@
   <div class="school-wrap">
     <div class="search-header">
       <div class="search-box">
-        <el-input v-model="schoolName" placeholder="输入学校名称" class="handle-input mr10"
+        <el-input class="handle-input" v-model="schoolName" placeholder="输入学校名称" 
           @keyup.enter="handleSearch"></el-input>
         <el-button type="primary" class="search-button" @click="handleSearch">
           <el-icon>
@@ -42,7 +42,7 @@
             </el-card>
           </li>
         </ul>
-        <el-pagination v-model:current-page="pageNum" v-model:page-size="pageSize" :total="total"
+        <el-pagination class="pagination" v-model:current-page="pageNum" v-model:page-size="pageSize" :total="total"
           layout="prev, pager, next, jumper" @current-page="currentChange" @page-size="sizeChange" />
       </div>
       <el-card class="heat-rank" style="height: max-content;">
@@ -70,8 +70,8 @@
 
 <script>
 import { ref } from "vue";
-import request from "../utils/request.js";
 import { ElMessage } from "element-plus";
+import request from "../utils/request.js";
 
 const pageNum = ref(1);
 const pageSize = ref(10);
@@ -179,8 +179,8 @@ export default {
     };
     getSchoolList();
     //空方法
-    const currentChange = () => {};
-    const sizeChange = () => {};
+    const currentChange = () => { };
+    const sizeChange = () => { };
     return {
       pageNum,
       pageSize,
@@ -225,7 +225,7 @@ export default {
   width: 50%;
 }
 
-.el-input {
+.handle-input {
   width: auto;
 }
 
@@ -269,17 +269,12 @@ li {
 
 .school-image {
   float: left;
-  /* size: auto; */
 }
 
 img {
   float: left;
   width: 100px;
   height: 100px;
-}
-
-.school-detial {
-  float: left;
 }
 
 h1 {
@@ -290,41 +285,14 @@ p {
   font-size: large;
 }
 
-a {
-  text-decoration: none;
-}
-
-a:link {
-  /*默认状态*/
-  color: black;
-}
-
-a:visited {
-  /*浏览过的*/
-  color: black;
-}
-
-a:hover {
-  /*悬浮状态*/
-  color: #f5940c;
-}
-
-.el-pagination {
+.pagination {
   justify-content: center;
 }
 
 .heat-rank {
   flex: 0 0 300px;
-  /* 设置热度排行榜宽度 */
   margin-left: 20px;
   padding: 10px;
-}
-
-.heat-list {
-  list-style-type: none;
-  padding: 0;
-  margin: 20px 0;
-  /* 调整条目之间的垂直间距 */
 }
 
 .heat-item {
@@ -413,4 +381,5 @@ a:hover {
   overflow: hidden;
   font-weight: normal;
   margin-right: 3px;
-}</style>
+}
+</style>

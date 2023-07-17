@@ -60,6 +60,12 @@ export default {
         lable: "个性化志愿推荐",
         url: "/home/recommend",
       },
+      {
+        path: "/home/GPThelp",
+        name: "recommend",
+        lable: "AI帮助",
+        url: "/home/GPThelp",
+      },
     ];
     const route = useRoute();
     const onRoutes = computed(() => {
