@@ -178,6 +178,9 @@ export default {
         });
     };
     getSchoolList();
+    //空方法
+    const currentChange = () => {};
+    const sizeChange = () => {};
     return {
       pageNum,
       pageSize,
@@ -193,7 +196,9 @@ export default {
       doublehigh_mark,
       RankList,
       getSchoolList,
-      handleSearch
+      handleSearch,
+      currentChange,
+      sizeChange,
     };
   },
 };

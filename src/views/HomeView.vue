@@ -1,10 +1,8 @@
 <template>
   <div class="tabs">
-    <!-- Active tab -->
     <div class="tabs__tab--active">
       <br />
     </div>
-    <!-- Inactive tab -->
     <div class="tabs__tab--inactive">
       <br />
     </div>
@@ -28,8 +26,6 @@ export default {
     CommonMenu,
     SelectDialog,
   },
-  setup() {
-  }
 }
 </script>
 
@@ -42,13 +38,11 @@ export default {
 
 .el-header {
   padding: 0 !important;
-  /* display:inline-block; */
   text-align: center;
 }
 
 .el-main {
   padding: 0 !important;
-  /* height: calc(100%-50px); */
   height: 100%;
   overflow-x: hidden;
   overflow-y: hidden;

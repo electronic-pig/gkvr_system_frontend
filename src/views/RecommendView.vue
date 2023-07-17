@@ -191,22 +191,6 @@ export default {
       };
     });
 
-    //前端完成分页
-    // const pageNum = ref(1);
-    // const pageSize = ref(10);
-    // const total = computed(() => {
-    //   return schoolList.value.length;
-    // });
-    // const pageSchoolList = computed(() => {
-    //   return schoolList.value.slice(
-    //     (pageNum.value - 1) * pageSize.value,
-    //     pageNum.value * pageSize.value
-    //   );
-    // });
-    // const currentChange = (val) => {
-    //   pageNum.value = val;
-    // };
-
     //配合后端进行分页
     const pageNum = ref(1);
     const pageSize = 10;
@@ -250,7 +234,6 @@ export default {
       handleAddSelect,
       provinceList,
       query,
-      // schoolList,
       getSchoolList,
       pageNum,
       pageSize,
