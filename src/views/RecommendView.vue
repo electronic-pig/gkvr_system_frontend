@@ -398,4 +398,85 @@ p {
 .el-pagination {
   justify-content: center;
 }
+.heat-rank {
+  flex: 0 0 300px;
+  margin-left: 20px;
+  padding: 10px;
+}
+
+.heat-item {
+  display: flex;
+  font-size: 25px;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 22px;
+  margin-bottom: 22px;
+  cursor: pointer;
+}
+.heat-info {
+  margin-left: 20px;
+}
+.heat-value {
+  color: rgb(237, 33, 33);
+}
+.major-info {
+  flex-grow: 1;
+}
+
+.major-name {
+  font-weight: bold;
+}
+
+.badge1 {
+  width: 20px;
+  height: 20px;
+  font-size: 15px;
+  color: #fff;
+  background: #da1d1d;
+  text-align: center;
+  line-height: 20px;
+  overflow: hidden;
+  font-weight: normal;
+  margin-top: 1px;
+  margin-right: 3px;
+}
+
+.badge2 {
+  width: 20px;
+  height: 20px;
+  font-size: 15px;
+  color: #fff;
+  background: #fc6639;
+  text-align: center;
+  line-height: 20px;
+  overflow: hidden;
+  font-weight: normal;
+  margin-right: 3px;
+}
+
+.badge3 {
+  width: 20px;
+  height: 20px;
+  font-size: 15px;
+  color: #fff;
+  background: #f6b759;
+  text-align: center;
+  line-height: 20px;
+  overflow: hidden;
+  font-weight: normal;
+  margin-right: 3px;
+}
+
+.badgeElse {
+  width: 20px;
+  height: 20px;
+  font-size: 15px;
+  color: #999999;
+  background: #eeeeee;
+  text-align: center;
+  line-height: 20px;
+  overflow: hidden;
+  font-weight: normal;
+  margin-right: 3px;
+}
 </style>

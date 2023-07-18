@@ -45,7 +45,7 @@
         <el-pagination class="pagination" v-model:current-page="pageNum" v-model:page-size="pageSize" :total="total"
           layout="prev, pager, next, jumper" @current-page="currentChange" @page-size="sizeChange" />
       </div>
-      <el-card class="heat-rank" style="height: max-content;">
+      <el-card class="heat-rank" style="height: max-content;" shadow="hover">
         <template #header>
           <h1>院校热度</h1>
         </template>
@@ -56,7 +56,7 @@
             <span v-if="index == 2" class="badge3">{{ index + 1 }}</span>
             <span v-if="index !== 0 & index !== 1 & index !== 2" class="badgeElse">{{ index + 1 }}</span>
             <div class="school-info">
-              <span class="school-name">{{ item.school }}</span>
+              <span class="school-name" style="font-size: 21px;">{{ item.school }}</span>
             </div>
             <div class="heat-info">
               <span class="heat-value">{{ item.heat }}</span>
@@ -95,6 +95,17 @@ const RankList = ref([
   { school: '浙江大学', heat: 139583 },
   { school: '武汉大学', heat: 130105 },
   { school: '西南大学', heat: 124058 },
+  { school: '电子科技大学', heat: 120231 },
+  { school: '重庆大学', heat: 116788 },
+  { school: '华中科技大学', heat: 112344 },
+  { school: '天津大学', heat: 109780 },
+  { school: '青岛大学', heat: 103452 },
+  { school: '华南理工大学', heat: 96872 },
+  { school: '上海交通大学', heat: 94567 },
+  { school: '同济大学', heat: 90231 },
+  { school: '西南交通大学', heat: 87456 },
+  { school: '中国海洋大学', heat: 82308 },
+  { school: '苏州大学', heat: 79990 },
 ]);
 export default {
   watch: {
@@ -318,6 +329,8 @@ p {
 
 .school-info {
   flex-grow: 1;
+  text-align: left;
+  margin-left: 3px;
 }
 
 .school-name {
