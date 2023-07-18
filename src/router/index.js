@@ -32,11 +32,6 @@ const routes = [
       name: 'recommend',
       component: () => import('../views/RecommendView.vue'),
     },
-    {
-      path: 'GPThelp',
-      name: 'GPThelp',
-      component: () => import('../views/RecommendView.vue'),
-    },
     ]
   },
   {

@@ -79,7 +79,7 @@ const total = ref(0);
 const pageSchoolList = ref([]);
 const schoolName = ref("");
 const schoolClass = ref("全部");
-const province_id = ref("");
+const province_name = ref("");
 const school_type_mark = ref("");
 const owner_mark = ref("");
 const is985 = ref("");
@@ -137,7 +137,7 @@ export default {
   setup() {
     const getSchoolList = () => {
       request
-        .get("/schoolInfo/search?page=" + pageNum.value + "&province_id=" + province_id.value
+        .get("/schoolInfo/search?page=" + pageNum.value + "&province_name=" + province_name.value
           + "&school_type_mark=" + school_type_mark.value + "&owner_mark=" + owner_mark.value
           + "&is985=" + is985.value + "&is211=" + is211.value + "&doublehigh_mark=" + doublehigh_mark.value)
         .then((res) => {
@@ -163,8 +163,6 @@ export default {
           if (res.code == 20000) {
             pageSchoolList.value = res.data.schoolInfo;
             total.value = res.data.total;
-            console.log(total.value);
-            ElMessage.success("获取成功");
           } else {
             ElMessage.error({
               message: "获取失败:" + res.message,
@@ -188,7 +186,7 @@ export default {
       pageSchoolList,
       schoolName,
       schoolClass,
-      province_id,
+      province_name,
       school_type_mark,
       owner_mark,
       is985,
@@ -255,7 +253,18 @@ ul {
 li {
   list-style-type: none;
 }
-
+a {
+  text-decoration: none;
+}
+a:link {
+  color: black;
+}
+a:visited {
+  color: black;
+}
+a:hover {
+  color: #f5940c;
+}
 .el-card {
   margin: 20px auto;
   height: 140px;
@@ -284,7 +293,9 @@ h1 {
 p {
   font-size: large;
 }
-
+.school-detial {
+  float: left;
+}
 .pagination {
   justify-content: center;
 }

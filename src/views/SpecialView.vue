@@ -2,9 +2,8 @@
   <div class="special-wrap">
     <div class="search-header">
       <div class="search-box">
-        <el-input class="handle-input" v-model="specialName" placeholder="输入专业名称" 
-          @keyup.enter="handleSearch"></el-input>
-        <el-button class="search-button" type="primary"  @click="handleSearch"><el-icon>
+        <el-input class="handle-input" v-model="specialName" placeholder="输入专业名称" @keyup.enter="handleSearch"></el-input>
+        <el-button class="search-button" type="primary" @click="handleSearch"><el-icon>
             <Search />
           </el-icon>搜索</el-button>
       </div>
@@ -21,14 +20,18 @@
       <ul>
         <li v-for="special in pageSpecialList" :key="special.id">
           <el-card shadow="hover">
-            <div class="special-detail">
-              <p>{{ special.name }}</p>
+            <div class="major_list_title">{{ special.majorName }}</div>
+            <div class="major_list_tags">
+              <span>专业代码：{{special.majorCode}}</span>&nbsp;|&nbsp;
+              <span>类别：{{special.typeId}}</span>&nbsp;|&nbsp;
+              <span>修业年限：{{special.years}}</span>&nbsp;|&nbsp;
+              <span>授予学位：{{special.degree}}</span>
             </div>
           </el-card>
         </li>
       </ul>
       <el-pagination class="pagination" v-model:current-page="pageNum" v-model:page-size="pageSize" :total="total"
-          layout="prev, pager, next, jumper" @current-page="currentChange" @page-size="sizeChange" />
+        layout="prev, pager, next, jumper" @current-page="currentChange" @page-size="sizeChange" />
     </div>
   </div>
 </template>
@@ -37,15 +40,20 @@
 import { ref, computed } from "vue";
 import { ElMessage } from "element-plus";
 import request from "../utils/request.js";
+const pageNum = ref(1);
+const pageSize = 10;
+const total = ref(0);
+const specialName = ref("");
+const specialLevel = ref("本科");
+const specialClass = ref("全部")
+const pageSpecialList = ref([]);
 export default {
+  watch: {
+    pageNum() {
+      this.getSpecialList();
+    }
+  },
   setup() {
-    const specialName = ref("");
-    const specialLevel = ref("本科");
-    const specialClass = ref("全部")
-    const pageNum = ref(1);
-    const pageSize = 10;
-    const total = ref(0);
-    const pageSpecialList = ref([]);
     const classList = computed(() => {
       const benList = [
         {
@@ -193,11 +201,11 @@ export default {
     });
     const getSpecialList = () => {
       request
-        .get("/getSpecialList", form.value)
+        .get("/majorInfo?page=" + pageNum.value)
         .then((res) => {
-          if (res.code == 200) {
-            pageSpecialList.value = res.data;
-            total.value = res.page_total;
+          if (res.code == 20000) {
+            pageSpecialList.value = res.data.majors;
+            total.value = res.data.totalpage;
           } else {
             ElMessage.error({
               message: "获取失败:" + res.message,
@@ -212,7 +220,25 @@ export default {
     };
     getSpecialList();
 
-    const handleSearch = () => getSpecialList();
+    const handleSearch = () => {
+      request
+        .get("/majorInfo/searchByName?majorName=" + specialName.value)
+        .then((res) => {
+          if (res.code == 20000) {
+            pageSpecialList.value = res.data.majorInfo;
+            total.value = res.data.total;
+          } else {
+            ElMessage.error({
+              message: "获取失败:" + res.message,
+            });
+          }
+        })
+        .catch((err) => {
+          ElMessage.error({
+            message: "服务器错误：" + err,
+          });
+        });
+    };
     const currentChange = () => { };
     const sizeChange = () => { };
     return {
@@ -235,6 +261,10 @@ export default {
 </script>
 
 <style>
+.pagination {
+  justify-content: center;
+}
+
 .special-wrap {
   margin: auto;
   text-align: center;
@@ -297,5 +327,19 @@ p {
 
 .el-pagination {
   justify-content: center;
+}
+.major_list_title{
+  font-size: 20px;
+  color: #000;
+  margin-bottom: 10px;
+  font-weight: 600;
+  transition: all .4s;
+}
+.major_list_title:hover{
+  color: #f5940c;
+  cursor: pointer;;
+}
+.major_list_tags{
+  margin-top: 3px;
 }
 </style>

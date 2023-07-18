@@ -43,7 +43,6 @@ export default {
     RegisterDialog
   },
   setup() {
-    //任意输入，用于测试
     const handleLogin = () => {
       router.push('/home');
       localStorage.setItem("ms_username", "admin");

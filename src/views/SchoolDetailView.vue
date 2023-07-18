@@ -98,8 +98,8 @@ import request from "../utils/request.js";
 import * as echarts from 'echarts'
 export default {
   setup() {
-    let schoolId = route.query.schoolId;
     const route = useRoute();
+    let schoolId = route.query.schoolId;
     const schoolInfo = ref({});
     const detail = ref({});
     const scLiScoreNew = ref({});
@@ -130,7 +130,7 @@ export default {
         });
     };
     
-    const year = ref('2021');
+    const year = ref('2022');
     const type = ref('理科');
 
     let scoreChart;
