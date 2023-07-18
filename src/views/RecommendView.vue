@@ -1,7 +1,7 @@
 <template>
   <div class="recommend-wrap">
     <div class="form-box">
-      <el-form :rules="rules" label-width="80px" class="ms-content" label-position="left"
+      <el-form label-width="80px" class="ms-content" label-position="left"
         hide-required-asterisk>
         <div class="type-box">
           <el-form-item label="科类" class="kelei-item">
@@ -12,7 +12,7 @@
           </el-form-item>
           <el-form-item label="分数" prop="userScore" style="margin-left:75px;">
             <el-input v-model="userScore" placeholder="您的分数" class="score-input" type="number"
-              @blur="handleGetRank"></el-input>
+              @keyup.enter="handleGetRank"></el-input>
           </el-form-item>
           <el-form-item label="排名" prop="userRank">
             <el-input v-model="userRank" disabled placeholder="您的排名" class="rank-input"></el-input>
@@ -25,7 +25,7 @@
           </el-button>
         </div>
         <el-form-item label="风险">
-          <el-radio-group v-model="riskClass" @change="getSchoolList">
+          <el-radio-group v-model="riskClass">
             <el-radio-button label="全部" />
             <el-radio-button label="可冲击" />
             <el-radio-button label="较稳妥" />
@@ -33,12 +33,12 @@
           </el-radio-group>
         </el-form-item>
         <el-form-item label="学校省份">
-          <el-radio-group v-model="provinceName" @change="getSchoolList">
+          <el-radio-group v-model="provinceName">
             <el-radio class="province-radio" v-for="p in provinceList" width="90px" :key="p" :label="p" border />
           </el-radio-group>
         </el-form-item>
         <el-form-item label="学校特色">
-          <el-radio-group v-model="schoolClass" size="large" @change="getSchoolList">
+          <el-radio-group v-model="schoolClass" size="large">
             <el-radio-button label="全部" />
             <el-radio-button label="985" />
             <el-radio-button label="211" />
@@ -65,10 +65,9 @@
               <span>{{ school.level }}</span>
               <span>&nbsp;&nbsp;最低位次：{{ school.avgScore }}</span>
               <span>&nbsp;&nbsp;预测投档线：{{ school.minRank }}</span>
-              <span>&nbsp;&nbsp;上线率：&nbsp;&nbsp;<el-icon size="20px"
-                  :color="school.upLineRate < 50 ? '#FF0000' : school.upLineRate > 80 ? '#409eff' : '#21c133'">{{
-                    school.upLineRate == 0 ?
-                    '<25' : school.upLineRate }}%</el-icon></span>
+              <span>&nbsp;&nbsp;录取概率：&nbsp;&nbsp;<el-icon size="20px"
+                  :color="school.upLineRate < 60 ? '#FF0000' : school.upLineRate >= 80 ? '#21c33c' : '#409eff'">
+                  {{school.upLineRate == 0 ?'<25' : school.upLineRate }}%</el-icon></span>
             </div>
             <el-button class="add-button" @click="handleAddSelect(school.schoolId)">
               +志愿表
@@ -101,8 +100,8 @@ const isDoublehigh = ref("");
 const isRisk = ref("");
 const isStable = ref("");
 const isEasy = ref("");
-const userScore = ref(500);
-const userRank = ref(150000)
+const userScore = ref(625);
+const userRank = ref(10000);
 export default {
   watch: {
     pageNum() {
@@ -121,69 +120,68 @@ export default {
         ElMessage.warning("分数范围为0~750，请输入正确的分数！");
         return;
       }
-      this.handleGetRank();
     },
     schoolClass() {
       switch (schoolClass.value) {
         case "全部":
-          pageNum.value = 1;
           is985.value = "";
           is211.value = "";
           isDoublehigh.value = "";
           this.getSchoolList();
+          pageNum.value = 1;
           break;
         case "985":
-          pageNum.value = 1;
           is985.value = "985";
           is211.value = "";
           isDoublehigh.value = "";
           this.getSchoolList();
+          pageNum.value = 1;
           break;
         case "211":
-          pageNum.value = 1;
           is985.value = "";
           is211.value = "211";
           isDoublehigh.value = "";
           this.getSchoolList();
+          pageNum.value = 1;
           break;
         case "双一流":
-          pageNum.value = 1;
           is985.value = "";
           is211.value = "";
           isDoublehigh.value = "38000";
           this.getSchoolList();
+          pageNum.value = 1;
           break;
       }
     },
     riskClass() {
       switch (riskClass.value) {
         case "全部":
-          pageNum.value = 1;
           isRisk.value = "";
           isStable.value = "";
           isEasy.value = "";
           this.getSchoolList();
+          pageNum.value = 1;
           break;
         case "可冲击":
-          pageNum.value = 1;
           isRisk.value = "可冲击";
           isStable.value = "";
           isEasy.value = "";
           this.getSchoolList();
+          pageNum.value = 1;
           break;
         case "较稳妥":
-          pageNum.value = 1;
           isRisk.value = "";
           isStable.value = "较稳妥";
           isEasy.value = "";
           this.getSchoolList();
+          pageNum.value = 1;
           break;
         case "可保底":
-          pageNum.value = 1;
           isRisk.value = "";
           isStable.value = "";
           isEasy.value = "可保底";
           this.getSchoolList();
+          pageNum.value = 1;
           break;
       }
     }
@@ -193,10 +191,6 @@ export default {
       '辽宁', '吉林', '黑龙江', '上海', '江苏', '浙江', '安徽', '福建', '江西',
       '山东', '河南', '湖北', '湖南', '广东', '广西', '海南', '重庆', '四川',
       '贵州', '云南', '西藏', '陕西', '甘肃', '青海', '宁夏', '新疆'];
-    const rules = {
-      userScore: [{ required: true, trigger: "blur" }],
-      userRank: [{ required: true, trigger: "blur" }],
-    };
     const handleGetRank = () => {
       var score = userScore.value;
       var mean = 500; // 平均分数
@@ -208,6 +202,7 @@ export default {
       // 使用标准正态分布的累积分布函数计算位次
       var rank = Math.round(maxRank - ((maxRank - minRank) * (0.5 * (1 + erf(zScore / Math.sqrt(2))))));
       userRank.value = Math.round(rank);
+      ElMessage.success("排名已更新");
     };
     // 辅助函数，用于计算误差函数
     function erf(x) {
@@ -238,7 +233,7 @@ export default {
           + "&isRisk=" + isRisk.value + "&isStable=" + isStable.value + "&isEasy=" + isEasy.value + "&page=" + pageNum.value)
         .then((res) => {
           if (res.code == 20000) {
-            pageSchoolList.value = res.data.schools;
+            pageSchoolList.value = res.data.reco_schools;
             total.value = res.data.total;
           } else {
             ElMessage.error({
@@ -256,7 +251,6 @@ export default {
     const currentChange = () => { };
     const sizeChange = () => { };
     return {
-      rules,
       provinceList,
       pageNum,
       pageSize,
