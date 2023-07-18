@@ -1,13 +1,13 @@
 <template>
   <div class="recommend-wrap">
     <div class="form-box">
-      <el-form :model="form" :rules="rules" label-width="80px" class="ms-content" label-position="left"
+      <el-form :rules="rules" label-width="80px" class="ms-content" label-position="left"
         hide-required-asterisk>
         <div class="type-box">
           <el-form-item label="科类" class="kelei-item">
-            <el-radio-group v-model="form.kelei" class="kelei-group" @change="handleSearch">
-              <el-radio label="0">理科</el-radio>
-              <el-radio label="1">文科</el-radio>
+            <el-radio-group v-model="kelei" class="kelei-group">
+              <el-radio label="理科">理科</el-radio>
+              <el-radio label="文科">文科</el-radio>
             </el-radio-group>
           </el-form-item>
           <el-form-item label="分数" prop="userScore" style="margin-left:75px;">
@@ -17,7 +17,7 @@
           <el-form-item label="排名" prop="userRank">
             <el-input v-model="userRank" disabled placeholder="您的排名" class="rank-input"></el-input>
           </el-form-item>
-          <el-button type="primary" class="serch-button" @click="handleSearch">
+          <el-button type="primary" class="serch-button" @click="getSchoolList">
             <el-icon>
               <Search />
             </el-icon>
@@ -25,14 +25,15 @@
           </el-button>
         </div>
         <el-form-item label="风险">
-          <el-radio-group v-model="form.schoolRisk" @change="handleSearch">
-            <el-radio-button label="高风险" />
-            <el-radio-button label="中风险" />
-            <el-radio-button label="低风险" />
+          <el-radio-group v-model="riskClass" @change="getSchoolList">
+            <el-radio-button label="全部" />
+            <el-radio-button label="可冲击" />
+            <el-radio-button label="较稳妥" />
+            <el-radio-button label="可保底" />
           </el-radio-group>
         </el-form-item>
         <el-form-item label="学校省份">
-          <el-radio-group v-model="province_name" @change="getSchoolList">
+          <el-radio-group v-model="provinceName" @change="getSchoolList">
             <el-radio class="province-radio" v-for="p in provinceList" width="90px" :key="p" :label="p" border />
           </el-radio-group>
         </el-form-item>
@@ -50,7 +51,7 @@
     <div class="school-list-wrap">
       <ul>
         <li v-for="school in pageSchoolList" :key="school.schoolId">
-          <el-card shadow="hover" body-style="">
+          <el-card shadow="hover">
             <div class="school-image">
               <img :src="'https://static-data.gaokao.cn/upload/logo/' +
                 school.schoolId +
@@ -62,14 +63,14 @@
                 <p>{{ school.schoolName }}</p>
               </router-link>
               <span>{{ school.level }}</span>
-              <span>&nbsp;&nbsp;最低分：{{ school.score2022 }}</span>
-              <span>&nbsp;&nbsp;预测投档线：{{ school.avgScore }}</span>
+              <span>&nbsp;&nbsp;最低位次：{{ school.avgScore }}</span>
+              <span>&nbsp;&nbsp;预测投档线：{{ school.minRank }}</span>
               <span>&nbsp;&nbsp;上线率：&nbsp;&nbsp;<el-icon size="20px"
-                  :color="school.possible < 25 ? '#FF0000' : school.possible > 60 ? '#409eff' : '#21c133'">{{
-                    school.possible == 0 ?
-                    '<25' : school.possible }}%</el-icon></span>
+                  :color="school.upLineRate < 50 ? '#FF0000' : school.upLineRate > 80 ? '#409eff' : '#21c133'">{{
+                    school.upLineRate == 0 ?
+                    '<25' : school.upLineRate }}%</el-icon></span>
             </div>
-            <el-button class="add-button" @click="handleAddSelect(school.schoolId, school.possible)">
+            <el-button class="add-button" @click="handleAddSelect(school.schoolId)">
               +志愿表
             </el-button>
           </el-card>
@@ -82,20 +83,24 @@
 </template>
 
 <script>
-import { ref, reactive } from "vue";
+import { ref } from "vue";
 import request from "../utils/request.js";
 import { ElMessage } from "element-plus";
+import store from "@/store";
 const pageNum = ref(1);
-const pageSize = 10;
+const pageSize = ref(10);
 const total = ref(0);
 const pageSchoolList = ref([]);
 const schoolClass = ref("全部");
-const province_name = ref("全部");
-const school_type_mark = ref("");
-const owner_mark = ref("");
+const riskClass = ref("全部");
+const kelei = ref("理科");
+const provinceName = ref("全部");
 const is985 = ref("");
 const is211 = ref("");
-const doublehigh_mark = ref("");
+const isDoublehigh = ref("");
+const isRisk = ref("");
+const isStable = ref("");
+const isEasy = ref("");
 const userScore = ref(500);
 const userRank = ref(150000)
 export default {
@@ -103,15 +108,18 @@ export default {
     pageNum() {
       this.getSchoolList();
     },
-    province_name() {
+    provinceName() {
+      pageNum.value = 1;
       this.getSchoolList();
     },
     userScore() {
       if (!userScore.value) {
         ElMessage.warning("请输入分数");
+        return;
       }
       if (userScore.value > 750 || userScore.value < 0) {
         ElMessage.warning("分数范围为0~750，请输入正确的分数！");
+        return;
       }
       this.handleGetRank();
     },
@@ -121,45 +129,70 @@ export default {
           pageNum.value = 1;
           is985.value = "";
           is211.value = "";
-          doublehigh_mark.value = "";
+          isDoublehigh.value = "";
           this.getSchoolList();
           break;
         case "985":
           pageNum.value = 1;
           is985.value = "985";
           is211.value = "";
-          doublehigh_mark.value = "";
+          isDoublehigh.value = "";
           this.getSchoolList();
           break;
         case "211":
           pageNum.value = 1;
           is985.value = "";
           is211.value = "211";
-          doublehigh_mark.value = "";
+          isDoublehigh.value = "";
           this.getSchoolList();
           break;
         case "双一流":
           pageNum.value = 1;
           is985.value = "";
           is211.value = "";
-          doublehigh_mark.value = "38000";
+          isDoublehigh.value = "38000";
           this.getSchoolList();
           break;
       }
     },
+    riskClass() {
+      switch (riskClass.value) {
+        case "全部":
+          pageNum.value = 1;
+          isRisk.value = "";
+          isStable.value = "";
+          isEasy.value = "";
+          this.getSchoolList();
+          break;
+        case "可冲击":
+          pageNum.value = 1;
+          isRisk.value = "可冲击";
+          isStable.value = "";
+          isEasy.value = "";
+          this.getSchoolList();
+          break;
+        case "较稳妥":
+          pageNum.value = 1;
+          isRisk.value = "";
+          isStable.value = "较稳妥";
+          isEasy.value = "";
+          this.getSchoolList();
+          break;
+        case "可保底":
+          pageNum.value = 1;
+          isRisk.value = "";
+          isStable.value = "";
+          isEasy.value = "可保底";
+          this.getSchoolList();
+          break;
+      }
+    }
   },
   setup() {
     const provinceList = ['全部', '北京', '天津', '河北', '山西', '内蒙古',
       '辽宁', '吉林', '黑龙江', '上海', '江苏', '浙江', '安徽', '福建', '江西',
       '山东', '河南', '湖北', '湖南', '广东', '广西', '海南', '重庆', '四川',
       '贵州', '云南', '西藏', '陕西', '甘肃', '青海', '宁夏', '新疆'];
-    const form = reactive({
-      userScore: 350,
-      userRank: 243965,
-      schoolRisk: '高风险',
-      province: '全部',
-      schoolClass: '全部',
-    });
     const rules = {
       userScore: [{ required: true, trigger: "blur" }],
       userRank: [{ required: true, trigger: "blur" }],
@@ -193,37 +226,16 @@ export default {
       var y = (((((a5 * t + a4) * t) + a3) * t + a2) * t + a1) * t;
       return sign * (1 - y * Math.exp(-x * x));
     }
-    const handleAddSelect = (schoolId, possible) => {
-      request
-        .post('/addselect', {
-          username: localStorage.getItem("ms_username"),
-          schoolId: schoolId,
-          possible: possible
-        })
-        .then((res) => {
-          if (res.code == 20000) {
-            ElMessage.success({
-              message: res.message,
-            });
-          } else {
-            ElMessage.error({
-              message: res.message,
-            });
-          }
-        })
-        .catch((err) => {
-          ElMessage.error({
-            message: "服务器错误：" + err,
-          });
-        });
+    const handleAddSelect = () => {
+      store.commit("showMajorSelect");
     };
     const getSchoolList = () => {
-      let provinceName = province_name.value;
-      if (province_name.value == "全部") provinceName = "";
+      let province_name = provinceName.value;
+      if (provinceName.value == "全部") province_name = "";
       request
-        .get("/schoolInfo/searchAndScore?page=" + pageNum.value + "&province_name=" + provinceName
-          + "&school_type_mark=" + school_type_mark.value + "&owner_mark=" + owner_mark.value
-          + "&is985=" + is985.value + "&is211=" + is211.value + "&doublehigh_mark=" + doublehigh_mark.value)
+        .get("/voluntaryReco/getReco?rank=" + userRank.value + "&provinceName=" + province_name
+          + "&is985=" + is985.value + "&is211=" + is211.value + "&isDoublehigh=" + isDoublehigh.value
+          + "&isRisk=" + isRisk.value + "&isStable=" + isStable.value + "&isEasy=" + isEasy.value + "&page=" + pageNum.value)
         .then((res) => {
           if (res.code == 20000) {
             pageSchoolList.value = res.data.schools;
@@ -244,20 +256,19 @@ export default {
     const currentChange = () => { };
     const sizeChange = () => { };
     return {
-      form,
       rules,
       provinceList,
       pageNum,
       pageSize,
       total,
+      kelei,
       pageSchoolList,
-      province_name,
-      school_type_mark,
-      owner_mark,
+      provinceName,
       is985,
       is211,
-      doublehigh_mark,
+      isDoublehigh,
       schoolClass,
+      riskClass,
       userScore,
       userRank,
       erf,
@@ -395,9 +406,10 @@ p {
   font-size: large;
 }
 
-.el-pagination {
+.pagination {
   justify-content: center;
 }
+
 .heat-rank {
   flex: 0 0 300px;
   margin-left: 20px;
@@ -413,12 +425,15 @@ p {
   margin-bottom: 22px;
   cursor: pointer;
 }
+
 .heat-info {
   margin-left: 20px;
 }
+
 .heat-value {
   color: rgb(237, 33, 33);
 }
+
 .major-info {
   flex-grow: 1;
 }

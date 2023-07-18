@@ -1,18 +1,20 @@
 <template>
-	<el-dialog v-model="dialogFormVisible" :append-to-body="false" title="志愿表" width="50%" @open="handleGetSelect()"
+	<el-dialog v-model="dialogFormVisible" :append-to-body="false" title="志愿表" width="50%" @open="handleOpen()"
 		@closed="closeDialog()">
-		<el-table :data="selectList">
-			<el-table-column property="name" label="学校名称" width="150" />
-			<el-table-column property="possible" label="录取概率" width="200" />
-			<el-table-column label="操作">
-				<template #default="scope">
-					<el-button link type="primary" size="small" @click="handleDelSelect(scope.$index)">删除</el-button>
-				</template>
+		<el-table :data="majorScoreList" height="1100" style="width: 100%" :default-sort="{ prop: 'score', order: 'descending' }">
+			<el-table-column prop="spname" label="专业名称" />
+			<el-table-column prop="localBatchName" label="录取批次" />
+			<el-table-column prop="min" label="最低分" />
+			<el-table-column prop="minSection" label="最低位次" />
+			<el-table-column label="选择">
+			  <template slot-scope="scope">
+				<el-checkbox v-model="scope.row.selected"></el-checkbox>
+			  </template>
 			</el-table-column>
-		</el-table>
+		  </el-table>
 		<template #footer>
 			<span class="dialog-footer">
-				<el-button @click="closeDialog()">确定</el-button>
+				<el-button @click="commit()">确定</el-button>
 			</span>
 		</template>
 	</el-dialog>
@@ -27,7 +29,7 @@ const selectList = ref([]);
 export default {
 	name: "SelectDialog",
 	setup() {
-		const handleGetSelect = () => {
+		const handleOpen = () => {
 			request
 				.get("/getselect" + localStorage.getItem("ms_username")
 				)
