@@ -5,6 +5,7 @@ export default createStore({
     showRegisterDialog: false,
     showSelectDialog: false,
     showMajorSelect: false,
+    schoolId: '',
     isLogin: '',
   },
   mutations: {
@@ -20,7 +21,8 @@ export default createStore({
     closeSelectDialog(state) {
       state.showSelectDialog = false;
     },
-    showMajorSelect(state) {
+    showMajorSelect(state, schoolId) {
+      state.schoolId = schoolId;
       state.showMajorSelect = true;
     },
     closeMajorSelect(state) {

@@ -22,7 +22,7 @@
           </el-input>
         </el-form-item>
         <div class="login-btn">
-          <el-button type="primary" @click="handleLogin()">登录</el-button>
+          <el-button type="primary" @click="clickLogin()">登录</el-button>
           <el-button type="primary" @click="clickRegister()">注册</el-button>
         </div>
       </el-form>
@@ -43,9 +43,11 @@ export default {
     RegisterDialog
   },
   setup() {
+    //测试用
     const handleLogin = () => {
       router.push('/home');
       localStorage.setItem("ms_username", "admin");
+      localStorage.setItem("ms_userid", "1");
     };
     const form = reactive({
       username: "",
@@ -65,7 +67,8 @@ export default {
               if (res.code == 20000) {
                 ElMessage.success("登录成功");
                 router.push("/home");
-                localStorage.setItem("ms_username", form.username);
+                localStorage.setItem("ms_username", res.data.user.username);
+                localStorage.setItem("ms_userid", res.data.user.id);
               } else {
                 ElMessage.error({
                   message: '登录失败:' + res.message,

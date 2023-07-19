@@ -1,8 +1,7 @@
 <template>
   <div class="recommend-wrap">
     <div class="form-box">
-      <el-form label-width="80px" class="ms-content" label-position="left"
-        hide-required-asterisk>
+      <el-form label-width="80px" class="ms-content" label-position="left" hide-required-asterisk>
         <div class="type-box">
           <el-form-item label="科类" class="kelei-item">
             <el-radio-group v-model="kelei" class="kelei-group">
@@ -12,7 +11,7 @@
           </el-form-item>
           <el-form-item label="分数" prop="userScore" style="margin-left:75px;">
             <el-input v-model="userScore" placeholder="您的分数" class="score-input" type="number"
-              @keyup.enter="handleGetRank"></el-input>
+              @keyup.enter="getSchoolList"></el-input>
           </el-form-item>
           <el-form-item label="排名" prop="userRank">
             <el-input v-model="userRank" disabled placeholder="您的排名" class="rank-input"></el-input>
@@ -67,9 +66,9 @@
               <span>&nbsp;&nbsp;预测投档线：{{ school.minRank }}</span>
               <span>&nbsp;&nbsp;录取概率：&nbsp;&nbsp;<el-icon size="20px"
                   :color="school.upLineRate < 60 ? '#FF0000' : school.upLineRate >= 80 ? '#21c33c' : '#409eff'">
-                  {{school.upLineRate == 0 ?'<25' : school.upLineRate }}%</el-icon></span>
+                  {{ school.upLineRate == 0 ? '<25' : school.upLineRate }}%</el-icon></span>
             </div>
-            <el-button class="add-button" @click="handleAddSelect(school.schoolId)">
+            <el-button class="add-button" @click="handleCommit(school.schoolId)">
               +志愿表
             </el-button>
           </el-card>
@@ -83,9 +82,9 @@
 
 <script>
 import { ref } from "vue";
-import request from "../utils/request.js";
+import { useStore } from "vuex";
 import { ElMessage } from "element-plus";
-import store from "@/store";
+import request from "../utils/request.js";
 const pageNum = ref(1);
 const pageSize = ref(10);
 const total = ref(0);
@@ -191,50 +190,22 @@ export default {
       '辽宁', '吉林', '黑龙江', '上海', '江苏', '浙江', '安徽', '福建', '江西',
       '山东', '河南', '湖北', '湖南', '广东', '广西', '海南', '重庆', '四川',
       '贵州', '云南', '西藏', '陕西', '甘肃', '青海', '宁夏', '新疆'];
-    const handleGetRank = () => {
-      var score = userScore.value;
-      var mean = 500; // 平均分数
-      var stdDev = 100; // 标准差
-      var minRank = 1; // 最小位次
-      var maxRank = 300000; // 最大位次
-      // 计算 z 分数
-      var zScore = (score - mean) / stdDev;
-      // 使用标准正态分布的累积分布函数计算位次
-      var rank = Math.round(maxRank - ((maxRank - minRank) * (0.5 * (1 + erf(zScore / Math.sqrt(2))))));
-      userRank.value = Math.round(rank);
-      ElMessage.success("排名已更新");
-    };
-    // 辅助函数，用于计算误差函数
-    function erf(x) {
-      // 常数
-      var a1 = 0.254829592;
-      var a2 = -0.284496736;
-      var a3 = 1.421413741;
-      var a4 = -1.453152027;
-      var a5 = 1.061405429;
-      var p = 0.3275911;
-      // 保存 x 的符号
-      var sign = (x >= 0) ? 1 : -1;
-      x = Math.abs(x);
-      // A&S 公式 7.1.26
-      var t = 1.0 / (1.0 + p * x);
-      var y = (((((a5 * t + a4) * t) + a3) * t + a2) * t + a1) * t;
-      return sign * (1 - y * Math.exp(-x * x));
-    }
-    const handleAddSelect = () => {
-      store.commit("showMajorSelect");
+    const store = useStore();
+    const handleCommit = (schoolId) => {
+      store.commit("showMajorSelect", schoolId);
     };
     const getSchoolList = () => {
       let province_name = provinceName.value;
       if (provinceName.value == "全部") province_name = "";
       request
-        .get("/voluntaryReco/getReco?rank=" + userRank.value + "&provinceName=" + province_name
+        .get("/voluntaryReco/getReco?score=" + userScore.value + "&provinceName=" + province_name
           + "&is985=" + is985.value + "&is211=" + is211.value + "&isDoublehigh=" + isDoublehigh.value
           + "&isRisk=" + isRisk.value + "&isStable=" + isStable.value + "&isEasy=" + isEasy.value + "&page=" + pageNum.value)
         .then((res) => {
           if (res.code == 20000) {
             pageSchoolList.value = res.data.reco_schools;
             total.value = res.data.total;
+            userRank.value = res.data.rank;
           } else {
             ElMessage.error({
               message: "获取失败:" + res.message,
@@ -265,10 +236,8 @@ export default {
       riskClass,
       userScore,
       userRank,
-      erf,
       getSchoolList,
-      handleGetRank,
-      handleAddSelect,
+      handleCommit,
       currentChange,
       sizeChange,
     };

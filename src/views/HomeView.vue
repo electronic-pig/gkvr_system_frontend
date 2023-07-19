@@ -11,15 +11,18 @@
     </el-main>
   </el-container>
   <select-dialog></select-dialog>
+  <major-select></major-select>
 </template>
 
 <script>
 import CommonMenu from "../components/CommonMenu.vue";
 import SelectDialog from "../components/SelectDialog.vue"
+import MajorSelect from "@/components/MajorSelect.vue";
 export default {
   components: {
     CommonMenu,
     SelectDialog,
+    MajorSelect
   },
 }
 </script>
