@@ -104,7 +104,9 @@ export default {
 
 <style scoped>
 .login-wrap {
-  position: absolute;
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   background-image: url(../assets/background.png);
@@ -125,7 +127,8 @@ export default {
   position: absolute;
   left: 50%;
   top: 60%;
-  width: 350px;
+  width: 380px;
+  height: 250px;
   margin: -190px 0 0 -175px;
   border-radius: 10px;
   background: rgba(255, 255, 255, 0.5);
