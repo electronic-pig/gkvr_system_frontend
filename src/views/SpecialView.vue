@@ -116,7 +116,7 @@ export default {
         .then((res) => {
           if (res.code == 20000) {
             pageSpecialList.value = res.data.majors;
-            total.value = res.data.totalpage;
+            total.value = res.data.totalPage;
           } else {
             ElMessage.error({
               message: "获取失败:" + res.message,

@@ -34,7 +34,7 @@ export default {
     const schoolId = computed(() => store.state.schoolId);
     const handleOpen = () => {
       request
-        .get("/schoolDetail?schoolId=" + schoolId.value)
+        .get("/schoolInfo/schoolDetail?schoolId=" + schoolId.value)
         .then((res) => {
           if (res.code == 20000) {
             majorScoreList.value = res.data.SchoolDetail[0].majorScoreList;
