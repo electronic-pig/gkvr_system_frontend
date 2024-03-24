@@ -1,35 +1,36 @@
-import axios from 'axios';
+// request.js
+import axios from "axios";
 
+// 创建axios实例
 const service = axios.create({
-  baseURL: process.env.VUE_APP_BASE_URL,
-  timeout: 5000
+  baseURL: import.meta.env.VITE_APP_BASE_URL, // API的base_url
+  timeout: 50000, // 请求超时时间
 });
 
-//request 拦截器
-//自请求发送前进行处理
+// 请求拦截器
 service.interceptors.request.use(
-  config => {
-    config.headers['Content-Type'] = 'application/json;charset=utf-8';
+  (config) => {
+    config.headers["Content-Type"] = "application/json;charset=utf-8";
     return config;
   },
-  error => {
-    console.log(error);
-    return Promise.reject();
+  (error) => {
+    // 处理请求错误
+    console.error("请求拦截器错误：", error); // for debug
+    Promise.reject(error);
   }
 );
 
-//response 拦截器
-//在接口响应后统一处理
+// 响应拦截器
 service.interceptors.response.use(
-  response => {
+  (response) => {
     let res = response.data;
     if (response.status === 200) {
       //如果返回的是文件
-      if (response.config.responseType === 'blob') {
+      if (response.config.responseType === "blob") {
         return res;
       }
       //兼容返回的字符串数据
-      if (typeof res === 'string') {
+      if (typeof res === "string") {
         res = res ? JSON.parse(res) : res;
       }
       return res;
@@ -37,9 +38,10 @@ service.interceptors.response.use(
       Promise.reject();
     }
   },
-  error => {
-    console.log(error);
-    return Promise.reject();
+  (error) => {
+    // 处理请求错误
+    console.error("响应拦截器错误：", error); // for debug
+    return Promise.reject(error);
   }
 );
 
