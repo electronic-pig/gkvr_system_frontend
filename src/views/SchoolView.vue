@@ -11,14 +11,18 @@
         <el-icon> <Search /> </el-icon>搜索</el-button
       >
     </div>
-
-    <el-radio-group v-model="schoolClass" size="large" @change="getSchoolList">
+    <el-radio-group
+      v-model="schoolClass"
+      size="large"
+      @change="getSortedSchool"
+    >
       <el-radio-button label="全部" value="全部" />
       <el-radio-button label="985" value="985" />
       <el-radio-button label="211" value="211" />
       <el-radio-button label="双一流" value="双一流" />
     </el-radio-group>
   </div>
+
   <div class="content">
     <div class="school-list">
       <ul>
@@ -117,7 +121,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, onMounted, watch } from "vue";
 import { ElLoading, ElMessage } from "element-plus";
 import request from "@/utils/request.js";
 
@@ -159,11 +163,16 @@ const RankList = ref([
   { school: "北京邮电大学", heat: "1619w" },
 ]);
 
+watch(schoolClass, () => {
+  pageNum.value = 1;
+});
+
 const handleSearch = async () => {
   const loadingInstance = ElLoading.service({
     fullscreen: true,
     text: "正在加载中...",
   });
+  schoolClass.value = "全部";
   try {
     const response = await request.get(
       "/schoolInfo/searchByName?schoolName=" +
@@ -183,13 +192,28 @@ const handleSearch = async () => {
   loadingInstance.close();
 };
 
-const getSchoolList = async () => {
+const getSortedSchool = async () => {
   const loadingInstance = ElLoading.service({
     fullscreen: true,
     text: "正在加载中...",
   });
+  searchValue.value = "";
+  let url = "";
+  switch (schoolClass.value) {
+    case "985":
+      url = "/schoolInfo/985";
+      break;
+    case "211":
+      url = "/schoolInfo/211";
+      break;
+    case "双一流":
+      url = "/schoolInfo/doublehigh";
+      break;
+    default:
+      url = "/schoolInfo/all";
+  }
   try {
-    const response = await request.get("/schoolInfo?page=" + pageNum.value);
+    const response = await request.get(url + "?page=" + pageNum.value);
     if (response.code == 200) {
       total.value = response.data.total;
       schoolList.value = response.data.schools;
@@ -205,10 +229,10 @@ const getSchoolList = async () => {
 const handleCurrentChange = (newPage) => {
   pageNum.value = newPage;
   if (searchValue.value) handleSearch();
-  else getSchoolList();
+  else getSortedSchool();
 };
 
-onMounted(getSchoolList);
+onMounted(getSortedSchool);
 </script>
 
 <style scoped>
