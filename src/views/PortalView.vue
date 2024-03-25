@@ -114,9 +114,11 @@
 
 <script setup>
 import { reactive, ref } from "vue";
+import { useRouter } from "vue-router";
 import { ElMessage } from "element-plus";
 import request from "@/utils/request.js";
 
+const router = useRouter();
 let showLoginDialog = ref(false);
 let showRegisterDialog = ref(false);
 
@@ -144,7 +146,7 @@ const login = async () => {
       localStorage.setItem("username", loginForm.username);
       loginForm.username = "";
       loginForm.password = "";
-      this.$router.push('/home');
+      router.push("/home/school");
     } else {
       ElMessage.error(response.message);
     }
