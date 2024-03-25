@@ -4,7 +4,7 @@
       <el-input
         class="handle-input"
         placeholder="输入学校名称"
-        v-model="schoolName"
+        v-model="searchValue"
         @keyup.enter="handleSearch"
       ></el-input>
       <el-button type="primary" @click="handleSearch">
@@ -98,14 +98,8 @@
               style="color: #999; background: #eee"
               >{{ index + 1 }}</span
             >
-            <div class="school-info">
-              <span class="school-name" style="font-size: 21px">{{
-                item.school
-              }}</span>
-            </div>
-            <div class="heat-info">
-              <span class="heat-value">{{ item.heat }}</span>
-            </div>
+            <span class="school-name">{{ item.school }}</span>
+            <span class="heat-value">{{ item.heat }}</span>
           </li>
         </ul>
       </el-card>
@@ -116,6 +110,7 @@
     background
     v-model:current-page="pageNum"
     :total="total"
+    :page-size="10"
     layout="prev, pager, next, jumper"
     @current-change="handleCurrentChange"
   />
@@ -126,7 +121,7 @@ import { ref, onMounted } from "vue";
 import { ElLoading, ElMessage } from "element-plus";
 import request from "@/utils/request.js";
 
-let schoolName = ref("");
+let searchValue = ref("");
 let schoolClass = ref("全部");
 let pageNum = ref(1);
 let total = ref(0);
@@ -169,9 +164,25 @@ const handleSearch = async () => {
     fullscreen: true,
     text: "正在加载中...",
   });
-
+  try {
+    const response = await request.get(
+      "/schoolInfo/searchByName?schoolName=" +
+        searchValue.value +
+        "&page=" +
+        pageNum.value
+    );
+    if (response.code == 200) {
+      total.value = response.data.total;
+      schoolList.value = response.data.schools;
+    } else {
+      ElMessage.error(response.message);
+    }
+  } catch (error) {
+    ElMessage.error(error);
+  }
   loadingInstance.close();
 };
+
 const getSchoolList = async () => {
   const loadingInstance = ElLoading.service({
     fullscreen: true,
@@ -193,7 +204,8 @@ const getSchoolList = async () => {
 
 const handleCurrentChange = (newPage) => {
   pageNum.value = newPage;
-  getSchoolList();
+  if (searchValue.value) handleSearch();
+  else getSchoolList();
 };
 
 onMounted(getSchoolList);
@@ -277,35 +289,31 @@ p {
   justify-content: center;
 }
 
+.rankCard {
+  border-radius: 10px;
+}
+
 .rankCard :deep(.el-card__body) {
   padding: 0 20px;
 }
 
 .heat-item {
   display: flex;
-  font-size: 26px;
-  justify-content: space-between;
   align-items: center;
   margin: 20px 0;
   cursor: pointer;
 }
 
-.school-info {
-  flex-grow: 1;
-  text-align: left;
-  margin-left: 3px;
-}
-
 .school-name {
+  font-size: 22px;
   font-weight: bold;
-}
-
-.heat-info {
-  margin-left: 20px;
+  margin-left: 4px;
 }
 
 .heat-value {
+  font-size: 26px;
   color: rgb(237, 33, 33);
+  margin-left: auto;
 }
 
 .badge {
