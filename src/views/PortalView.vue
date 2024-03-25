@@ -115,7 +115,7 @@
 <script setup>
 import { reactive, ref } from "vue";
 import { useRouter } from "vue-router";
-import { ElMessage } from "element-plus";
+import { ElLoading, ElMessage } from "element-plus";
 import request from "@/utils/request.js";
 
 const router = useRouter();
@@ -137,7 +137,10 @@ const login = async () => {
     ElMessage.error("请填写完整的登录信息！");
     return;
   }
-
+  const loadingInstance = ElLoading.service({
+    fullscreen: true,
+    text: "正在加载中...",
+  });
   try {
     const response = await request.post("/user/login", loginForm);
     if (response.code == 200) {
@@ -153,6 +156,7 @@ const login = async () => {
   } catch (error) {
     ElMessage.error(error);
   }
+  loadingInstance.close();
 };
 
 const register = async () => {
@@ -169,7 +173,10 @@ const register = async () => {
     ElMessage.error("两次输入的密码不一致");
     return;
   }
-
+  const loadingInstance = ElLoading.service({
+    fullscreen: true,
+    text: "正在加载中...",
+  });
   try {
     const response = await request.post("/user/register", registerForm);
     console.log(response);
@@ -185,6 +192,7 @@ const register = async () => {
   } catch (error) {
     ElMessage.error(error);
   }
+  loadingInstance.close();
 };
 </script>
 
