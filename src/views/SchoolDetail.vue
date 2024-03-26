@@ -29,6 +29,52 @@
         </div>
       </div>
     </div>
+
+    <div id="intro-wrap">
+      <div class="pic-wrap">
+        <img
+          class="pic"
+          :src="
+            'https://static-data.eol.cn//upload/svideo/piliang_' +
+            schoolInfo.schoolId +
+            '_thumb.jpg'
+          "
+          alt="school-pic"
+        />
+      </div>
+      <div id="intro" class="common-card">
+        <div class="rank-wrap">
+          <div class="school_rank">
+            <div class="school_rank_text">
+              <span class="school_rank_num">{{
+                schoolInfoDetail.ruankeRank
+              }}</span
+              >名
+            </div>
+            软科综合
+          </div>
+          <div class="school_rank">
+            <div class="school_rank_text">
+              <span class="school_rank_num">{{ schoolInfoDetail.xyhRank }}</span
+              >名
+            </div>
+            校友会综合
+          </div>
+          <div class="school_rank">
+            <div class="school_rank_text">
+              <span class="school_rank_num">{{ schoolInfoDetail.usRank }}</span
+              >名
+            </div>
+            US世界
+          </div>
+        </div>
+        <div class="content-wrap">
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{
+            schoolInfoDetail.content
+          }}...
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -132,5 +178,56 @@ p {
   display: inline-block;
   font-weight: bold;
   background-color: #fff;
+}
+
+#intro-wrap {
+  display: flex;
+}
+
+.pic-wrap {
+  background: #fff;
+  margin: 10px 0;
+  border-radius: 30px;
+}
+
+.pic {
+  width: 25vw;
+  border-radius: 30px;
+}
+
+#intro {
+  display: flex;
+  flex-direction: column;
+}
+
+.rank-wrap {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.content-wrap {
+  padding: 5px 10px 0 10px;
+}
+
+.school_rank {
+  height: 100px;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.school_rank_text {
+  color: #f60;
+  margin-bottom: 8px;
+  line-height: 20px;
+}
+
+.school_rank_num {
+  font-size: 30px;
+  color: #f60;
+  margin-right: 1px;
 }
 </style>
