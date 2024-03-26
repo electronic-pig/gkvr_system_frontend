@@ -236,11 +236,14 @@ li {
   cursor: pointer;
 }
 
+.majorCard :deep(.el-card__body) {
+  padding: 0;
+}
+
 .major_list_title {
-  margin: 10px auto;
   font-size: 20px;
   font-weight: bold;
-  margin-bottom: 10px;
+  margin: 10px auto;
   transition: all 0.4s;
 }
 
