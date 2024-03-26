@@ -14,7 +14,7 @@
     <el-radio-group
       v-model="schoolClass"
       size="large"
-      @change="getSortedSchool"
+      @change="getSortedSchools"
     >
       <el-radio-button label="全部" value="全部" />
       <el-radio-button label="985" value="985" />
@@ -77,7 +77,11 @@
           <h1 style="text-align: center; margin: 0 auto">院校热度</h1>
         </template>
         <ul>
-          <li v-for="(item, index) in RankList" :key="index" class="heat-item">
+          <li
+            v-for="(item, index) in schoolRankList"
+            :key="index"
+            class="heat-item"
+          >
             <span
               v-if="index == 0"
               class="badge"
@@ -124,44 +128,13 @@
 import { ref, onMounted, watch } from "vue";
 import { ElLoading, ElMessage } from "element-plus";
 import request from "@/utils/request.js";
+import schoolRankList from "@/assets/schoolRankList.json";
 
 let searchValue = ref("");
 let schoolClass = ref("全部");
 let pageNum = ref(1);
 let total = ref(0);
 let schoolList = ref([]);
-const RankList = ref([
-  { school: "厦门大学", heat: "4207.5w" },
-  { school: "四川大学", heat: "3392.5w" },
-  { school: "武汉大学", heat: "2709.3w" },
-  { school: "中山大学", heat: "2616.1w" },
-  { school: "清华大学", heat: "2428.9w" },
-  { school: "北京大学", heat: "2363.5w" },
-  { school: "中南大学", heat: "2337.5w" },
-  { school: "南京大学", heat: "2307.9w" },
-  { school: "西南大学", heat: "2280.7w" },
-  { school: "电子科技大学", heat: "2143w" },
-  { school: "山东大学", heat: "1959.9w" },
-  { school: "华中科技大学", heat: "1941w" },
-  { school: "重庆大学", heat: "1926.2w" },
-  { school: "湖南大学", heat: "1902.3w" },
-  { school: "浙江大学", heat: "1867.3w" },
-  { school: "天津大学", heat: "1843w" },
-  { school: "上海交通大学", heat: "1822w" },
-  { school: "华南理工大学", heat: "1820w" },
-  { school: "郑州大学", heat: "1808.2w" },
-  { school: "青岛大学", heat: "1798.1w" },
-  { school: "西南交通大学", heat: "1768w" },
-  { school: "长安大学", heat: "1709.2w" },
-  { school: "中国海洋大学", heat: "1700w" },
-  { school: "苏州大学", heat: "1692.2w" },
-  { school: "同济大学", heat: "1675.1w" },
-  { school: "武汉理工大学", heat: "1664w" },
-  { school: "深圳大学", heat: "1653.6w" },
-  { school: "海南大学", heat: "1635.4w" },
-  { school: "大连理工大学", heat: "1628w" },
-  { school: "北京邮电大学", heat: "1619w" },
-]);
 
 watch(schoolClass, () => {
   pageNum.value = 1;
@@ -175,10 +148,10 @@ const handleSearch = async () => {
   schoolClass.value = "全部";
   try {
     const response = await request.get(
-      "/schoolInfo/searchByName?schoolName=" +
-        searchValue.value +
-        "&page=" +
-        pageNum.value
+      "/schoolInfo/searchByName?page=" +
+        pageNum.value +
+        "&schoolName=" +
+        searchValue.value
     );
     if (response.code == 200) {
       total.value = response.data.total;
@@ -192,7 +165,7 @@ const handleSearch = async () => {
   loadingInstance.close();
 };
 
-const getSortedSchool = async () => {
+const getSortedSchools = async () => {
   const loadingInstance = ElLoading.service({
     fullscreen: true,
     text: "正在加载中...",
@@ -229,10 +202,10 @@ const getSortedSchool = async () => {
 const handleCurrentChange = (newPage) => {
   pageNum.value = newPage;
   if (searchValue.value) handleSearch();
-  else getSortedSchool();
+  else getSortedSchools();
 };
 
-onMounted(getSortedSchool);
+onMounted(getSortedSchools);
 </script>
 
 <style scoped>
@@ -309,10 +282,6 @@ p {
   font-size: large;
 }
 
-.pagination {
-  justify-content: center;
-}
-
 .rankCard {
   border-radius: 10px;
 }
@@ -349,5 +318,8 @@ p {
   overflow: hidden;
   font-weight: normal;
   margin-right: 3px;
+}
+.pagination {
+  justify-content: center;
 }
 </style>
