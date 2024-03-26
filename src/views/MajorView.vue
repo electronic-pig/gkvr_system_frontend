@@ -150,7 +150,7 @@ const getSortedMajors = async () => {
   searchValue.value = "";
   try {
     const response = await request.get(
-      "majorInfo/getSortedMajors?page=" + pageNum.value + "&type=" + type.value
+      "/majorInfo/getSortedMajors?page=" + pageNum.value + "&type=" + type.value
     );
     if (response.code == 200) {
       total.value = response.data.total;

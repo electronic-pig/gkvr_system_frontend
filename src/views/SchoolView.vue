@@ -27,7 +27,11 @@
     <div class="school-list">
       <ul>
         <li v-for="school in schoolList" :key="school.schoolId">
-          <el-card class="schoolCard" shadow="hover">
+          <el-card
+            class="schoolCard"
+            shadow="hover"
+            @click="goToDetail(school.schoolId)"
+          >
             <div class="school-info">
               <div class="school-image">
                 <el-image
@@ -126,6 +130,7 @@
 
 <script setup>
 import { ref, onMounted, watch } from "vue";
+import { useRouter } from "vue-router";
 import { ElLoading, ElMessage } from "element-plus";
 import request from "@/utils/request.js";
 import schoolRankList from "@/assets/schoolRankList.json";
@@ -135,10 +140,15 @@ let schoolClass = ref("全部");
 let pageNum = ref(1);
 let total = ref(0);
 let schoolList = ref([]);
+const router = useRouter();
 
 watch(schoolClass, () => {
   pageNum.value = 1;
 });
+
+const goToDetail = (id) => {
+  router.push({ name: "schoolDetail", params: { id: id } });
+};
 
 const handleSearch = async () => {
   const loadingInstance = ElLoading.service({

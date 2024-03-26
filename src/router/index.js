@@ -4,6 +4,7 @@ import HomeView from "../views/HomeView.vue";
 import SchoolView from "../views/SchoolView.vue";
 import MajorView from "../views/MajorView.vue";
 import RecommendView from "../views/RecommendView.vue";
+import SchoolDetail from "../views/SchoolDetail.vue"
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -12,6 +13,11 @@ const router = createRouter({
       path: "/",
       name: "portal",
       component: PortalView,
+    },
+    {
+      path: "/schoolDetail/:id",
+      name: "schoolDetail",
+      component: SchoolDetail,
     },
     {
       path: "/home",
