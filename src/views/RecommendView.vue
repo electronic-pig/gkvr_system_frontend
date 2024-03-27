@@ -13,16 +13,11 @@
           v-model="userScore"
           placeholder="您的分数"
           type="number"
-          @keyup.enter="getRecommendList"
+          @keyup.enter="getRank()"
         ></el-input>
       </el-form-item>
       <el-form-item label="排名" style="margin-left: 2vw">
-        <el-input
-          v-model="userRank"
-          placeholder="您的排名"
-          type="number"
-          disabled
-        ></el-input>
+        <el-input v-model="userRank" placeholder="您的排名" disabled></el-input>
       </el-form-item>
       <el-button
         type="primary"
@@ -67,18 +62,41 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
+import { ElLoading, ElMessage } from "element-plus";
 import provinceList from "@/assets/provinceList";
 import request from "../utils/request.js";
 
 let subject = ref("理科");
-let userScore = ref(0);
-let userRank = ref(0);
+let userScore = ref(640);
+let userRank = ref("");
 let riskClass = ref("全部");
 let provinceName = ref("全部");
 let schoolClass = ref("全部");
 
 const getRecommendList = () => {};
+
+const getRank = async () => {
+  const loadingInstance = ElLoading.service({
+    fullscreen: true,
+    text: "正在加载中...",
+  });
+  try {
+    const response = await request.get(
+      "/scoreRank/getRank?score=" + userScore.value
+    );
+    if (response.code == 200) {
+      userRank.value = response.data.scoreRank.rankRange;
+    } else {
+      ElMessage.error(response.message);
+    }
+  } catch (error) {
+    ElMessage.error(error);
+  }
+  loadingInstance.close();
+};
+
+onMounted(getRank);
 </script>
 
 <style scoped>
