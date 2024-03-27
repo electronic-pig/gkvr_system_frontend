@@ -1,12 +1,14 @@
 # 高考志愿推荐平台_前端
 ![GitHub](https://img.shields.io/github/license/electronic-pig/gkvr_system_frontend)
 <img alt="GitHub contributors" src="https://img.shields.io/github/contributors/electronic-pig/gkvr_system_frontend">
+![GitHub Repo stars](https://img.shields.io/github/stars/electronic-pig/gkvr_system_frontend)
+
 ## 最新动态
 - [2024/3/23] 🔥 对前端代码进行重构，更换了前端架构，目前正在更新中，旧版本代码请查看tag v1.0.0
 ## 项目介绍
 一个前后端分离的高考志愿推荐系统(gaokao volunteer recommendation system)
 
-在线体验地址：[高考志愿推荐平台](http://gkvr.japaneast.cloudapp.azure.com) (用户名：admin 密码：123456)
+~~在线体验地址：[高考志愿推荐平台](http://gkvr.japaneast.cloudapp.azure.com) (用户名：admin 密码：123456)~~
 
 若您对项目后端感兴趣，请前往[后端仓库](https://github.com/electronic-pig/gkvr_system_backend)
 
@@ -40,9 +42,8 @@
 
 ⚠️ 本项目的数据信息爬取自[掌上高考](https://www.gaokao.cn/)，项目成员对数据真实性不做任何保证，且项目存在数据紊乱和错误的情况，一切以学校官网为准
 
-⚠️ 本项目部署在小型云服务器上，服务器承载能力有限，可能会出现网址访问失败的情况
+⚠️ 本项目部署在小型云服务器上，服务器承载能力有限，可能会出现网址访问失败的情况(2024/3/23 服务器已挂)
 
-⚠️ 本项目已完成所有开发需求，项目成员不会对本项目进行更新和维护
 ## 鸣谢
 前端UI设计部分参考自[Cabbage-xy/gaokao](https://github.com/Cabbage-xy/gaokao)，在此感谢此开源贡献者
 ## 项目参与者
