@@ -122,7 +122,6 @@
     background
     v-model:current-page="pageNum"
     :total="total"
-    :page-size="10"
     layout="prev, pager, next, jumper"
     @current-change="handleCurrentChange"
   />
@@ -137,9 +136,9 @@ import schoolRankList from "@/assets/schoolRankList.json";
 
 let searchValue = ref("");
 let schoolClass = ref("全部");
+let schoolList = ref([]);
 let pageNum = ref(1);
 let total = ref(0);
-let schoolList = ref([]);
 const router = useRouter();
 
 watch(schoolClass, () => {
@@ -329,6 +328,7 @@ p {
   font-weight: normal;
   margin-right: 3px;
 }
+
 .pagination {
   justify-content: center;
 }

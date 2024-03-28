@@ -93,7 +93,6 @@
     background
     v-model:current-page="pageNum"
     :total="total"
-    :page-size="10"
     layout="prev, pager, next, jumper"
     @current-change="handleCurrentChange"
   />
