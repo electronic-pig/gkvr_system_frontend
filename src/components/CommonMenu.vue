@@ -50,9 +50,7 @@
       <el-table-column prop="majorF" label="专业F" />
       <el-table-column label="操作" width="84px">
         <template #default="scope">
-          <el-button
-            type="danger"
-            @click="handleDelete(scope.$index, scope.row)"
+          <el-button type="danger" @click="handleDelete(scope.row)"
             >删除</el-button
           >
         </template>
@@ -62,7 +60,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, reactive } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import { ElLoading, ElMessage } from "element-plus";
 import request from "@/utils/request";
@@ -92,6 +90,10 @@ const route = useRoute();
 let username = ref(localStorage.getItem("username"));
 let showTableDialog = ref(false);
 let userTable = ref([]);
+const VoluntaryForm = reactive({
+  userName: username,
+  schoolName: "",
+});
 
 const onRoutes = computed(() => {
   return route.path;
@@ -119,11 +121,31 @@ const showDialog = async () => {
     );
     if (response.code == 200) {
       userTable.value = response.data.userVoluntary;
-      if (userTable.value.length > 0) {
-        showTableDialog.value = true;
-      } else {
-        ElMessage.warning("您还没有填写志愿表!");
-      }
+      showTableDialog.value = true;
+    } else {
+      ElMessage.error(response.message);
+    }
+  } catch (error) {
+    ElMessage.error(error);
+  }
+  loadingInstance.close();
+};
+
+const handleDelete = async (row) => {
+  VoluntaryForm.schoolName = row.schoolName;
+  const loadingInstance = ElLoading.service({
+    fullscreen: true,
+    text: "正在加载中...",
+  });
+  try {
+    const response = await request.post(
+      "/userVoluntary/deleteVoluntary",
+      VoluntaryForm
+    );
+    if (response.code == 200) {
+      ElMessage.success("删除成功！");
+      VoluntaryForm.schoolName = "";
+      showDialog();
     } else {
       ElMessage.error(response.message);
     }
