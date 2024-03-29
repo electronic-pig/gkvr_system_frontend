@@ -12,7 +12,7 @@
     </el-menu-item>
 
     <div class="menu-right">
-      <el-button type="default">志愿表</el-button>
+      <el-button @click="showDialog">志愿表</el-button>
       <div class="user-avator">
         <el-icon>
           <Avatar />
@@ -33,11 +33,39 @@
       </el-dropdown>
     </div>
   </el-menu>
+  <el-dialog
+    title="志愿表"
+    v-model="showTableDialog"
+    align-center
+    center
+    width="90%"
+    style="height: 70%"
+    ><el-table :data="userTable" height="60vh">
+      <el-table-column prop="schoolName" label="学校名称" width="100px" />
+      <el-table-column prop="majorA" label="专业A" />
+      <el-table-column prop="majorB" label="专业B" />
+      <el-table-column prop="majorC" label="专业C" />
+      <el-table-column prop="majorD" label="专业D" />
+      <el-table-column prop="majorE" label="专业E" />
+      <el-table-column prop="majorF" label="专业F" />
+      <el-table-column label="操作" width="84px">
+        <template #default="scope">
+          <el-button
+            type="danger"
+            @click="handleDelete(scope.$index, scope.row)"
+            >删除</el-button
+          >
+        </template>
+      </el-table-column></el-table
+    ></el-dialog
+  >
 </template>
 
 <script setup>
 import { ref, computed } from "vue";
 import { useRouter, useRoute } from "vue-router";
+import { ElLoading, ElMessage } from "element-plus";
+import request from "@/utils/request";
 
 const menu = [
   {
@@ -62,17 +90,47 @@ const menu = [
 const router = useRouter();
 const route = useRoute();
 let username = ref(localStorage.getItem("username"));
+let showTableDialog = ref(false);
+let userTable = ref([]);
+
 const onRoutes = computed(() => {
   return route.path;
 });
+
 const handleSelect = (index) => {
   router.push(index);
 };
+
 const handleCommand = (command) => {
   if (command === "loginout") {
     localStorage.removeItem("username");
     router.push("/");
   }
+};
+
+const showDialog = async () => {
+  const loadingInstance = ElLoading.service({
+    fullscreen: true,
+    text: "正在加载中...",
+  });
+  try {
+    const response = await request.get(
+      "/userVoluntary/getVoluntary?user_name=" + username.value
+    );
+    if (response.code == 200) {
+      userTable.value = response.data.userVoluntary;
+      if (userTable.value.length > 0) {
+        showTableDialog.value = true;
+      } else {
+        ElMessage.warning("您还没有填写志愿表!");
+      }
+    } else {
+      ElMessage.error(response.message);
+    }
+  } catch (error) {
+    ElMessage.error(error);
+  }
+  loadingInstance.close();
 };
 </script>
 
