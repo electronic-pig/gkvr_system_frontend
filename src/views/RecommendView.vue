@@ -83,7 +83,7 @@
             <el-button
               size="large"
               style="margin: auto 0"
-              @click="handleCommit(school.schoolId)"
+              @click.stop="handleCommit(school.schoolId)"
             >
               +志愿表
             </el-button>
@@ -100,6 +100,32 @@
     layout="prev, pager, next, jumper"
     @current-change="handleCurrentChange"
   />
+  <el-dialog
+    title="专业表"
+    v-model="showTableDialog"
+    align-center
+    center
+    style="height: 70%"
+  >
+    <el-table
+      ref="multipleTable"
+      :data="schoolMajors"
+      height="55vh"
+      @selection-change="handleSelectionChange"
+    >
+      <el-table-column type="selection" width="30px" />
+      <el-table-column prop="spname" label="专业名称" />
+      <el-table-column prop="batch" label="录取批次" width="80px" />
+      <el-table-column prop="level2" label="学科类别" width="80px" />
+      <el-table-column prop="level3" label="专业类别" width="80px" />
+      <el-table-column prop="min" label="最低分" width="66px" />
+      <el-table-column prop="minSection" label="最低位次" width="80px" />
+    </el-table>
+    <div class="button-container">
+      <el-button @click="clearSelection()">清除所有</el-button>
+      <el-button type="primary" @click="commitTable()">提交</el-button>
+    </div></el-dialog
+  >
 </template>
 
 <script setup>
@@ -117,6 +143,10 @@ let averageScores = ref([]);
 let upLineRateList = ref([]);
 let pageNum = ref(1);
 let total = ref(0);
+let schoolMajors = ref([]);
+let showTableDialog = ref(false);
+const multipleTable = ref(null);
+const majorSelection = ref([]);
 const router = useRouter();
 
 watch(risk, () => {
@@ -180,6 +210,46 @@ const handleCurrentChange = (newPage) => {
   getRecommendList();
 };
 
+const handleCommit = async (schoolId) => {
+  const loadingInstance = ElLoading.service({
+    fullscreen: true,
+    text: "正在加载中...",
+  });
+  try {
+    const response = await request.get(
+      "/schoolInfoDetail?schoolId=" + schoolId
+    );
+    if (response.code == 200) {
+      schoolMajors.value = response.data.majorScore;
+      showTableDialog.value = true;
+    } else {
+      ElMessage.error(response.message);
+    }
+  } catch (error) {
+    ElMessage.error(error);
+  }
+  loadingInstance.close();
+};
+
+const clearSelection = () => {
+  multipleTable.value.clearSelection();
+};
+
+const handleSelectionChange = (val) => {
+  majorSelection.value = val.map((item) => item.spname);
+};
+
+const commitTable = () => {
+  if (majorSelection.value.length == 0) {
+    ElMessage.warning("最少选择一门专业！");
+    return;
+  }
+  if (majorSelection.value.length > 6) {
+    ElMessage.warning("最多选择六门专业！");
+    return;
+  }
+  showTableDialog.value = false;
+};
 onMounted(getRank(), getRecommendList());
 </script>
 
@@ -224,5 +294,11 @@ p {
 
 .pagination {
   justify-content: center;
+}
+
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
 }
 </style>
