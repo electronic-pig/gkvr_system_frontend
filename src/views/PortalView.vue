@@ -179,7 +179,6 @@ const register = async () => {
   });
   try {
     const response = await request.post("/user/register", registerForm);
-    console.log(response);
     if (response.code == 200) {
       ElMessage.success("注册成功！");
       showRegisterDialog.value = false;
@@ -277,16 +276,10 @@ h3 {
 
   border-radius: 50px;
   transition: all 0.4s ease-in-out;
-  -o-transition: all 0.4s ease-in-out;
-  -webkit-transition: all 0.4s ease-in-out;
-  transition: all 0.4s ease-in-out;
 }
 
 .btn-hover:hover {
   background-position: 100% 0;
-  transition: all 0.4s ease-in-out;
-  -o-transition: all 0.4s ease-in-out;
-  -webkit-transition: all 0.4s ease-in-out;
   transition: all 0.4s ease-in-out;
 }
 

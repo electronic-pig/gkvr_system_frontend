@@ -123,13 +123,13 @@
     </el-table>
     <div class="button-container">
       <el-button @click="clearSelection()">清除所有</el-button>
-      <el-button type="primary" @click="commitTable()">提交</el-button>
+      <el-button type="primary" @click="commitVoluntary()">提交</el-button>
     </div></el-dialog
   >
 </template>
 
 <script setup>
-import { onMounted, ref, watch } from "vue";
+import { onMounted, ref, reactive, watch } from "vue";
 import { ElLoading, ElMessage } from "element-plus";
 import { useRouter } from "vue-router";
 import request from "../utils/request.js";
@@ -146,7 +146,16 @@ let total = ref(0);
 let schoolMajors = ref([]);
 let showTableDialog = ref(false);
 const multipleTable = ref(null);
-const majorSelection = ref([]);
+const VoluntaryForm = reactive({
+  userName: localStorage.getItem("username"),
+  schoolName: "",
+  majorA: "",
+  majorB: "",
+  majorC: "",
+  majorD: "",
+  majorE: "",
+  majorF: "",
+});
 const router = useRouter();
 
 watch(risk, () => {
@@ -221,6 +230,7 @@ const handleCommit = async (schoolId) => {
     );
     if (response.code == 200) {
       schoolMajors.value = response.data.majorScore;
+      VoluntaryForm.schoolName = response.data.schoolInfo.schoolName;
       showTableDialog.value = true;
     } else {
       ElMessage.error(response.message);
@@ -236,18 +246,66 @@ const clearSelection = () => {
 };
 
 const handleSelectionChange = (val) => {
-  majorSelection.value = val.map((item) => item.spname);
+  if (val.length > 6) {
+    ElMessage.warning("最多选择六个专业！");
+    return;
+  }
+  VoluntaryForm.majorA =
+    val.map((item) => item.spname).length > 0
+      ? val.map((item) => item.spname)[0]
+      : "";
+  VoluntaryForm.majorB =
+    val.map((item) => item.spname).length > 1
+      ? val.map((item) => item.spname)[1]
+      : "";
+  VoluntaryForm.majorC =
+    val.map((item) => item.spname).length > 2
+      ? val.map((item) => item.spname)[2]
+      : "";
+  VoluntaryForm.majorD =
+    val.map((item) => item.spname).length > 3
+      ? val.map((item) => item.spname)[3]
+      : "";
+  VoluntaryForm.majorE =
+    val.map((item) => item.spname).length > 4
+      ? val.map((item) => item.spname)[4]
+      : "";
+  VoluntaryForm.majorF =
+    val.map((item) => item.spname).length > 5
+      ? val.map((item) => item.spname)[5]
+      : "";
 };
 
-const commitTable = () => {
-  if (majorSelection.value.length == 0) {
+const commitVoluntary = async () => {
+  if (VoluntaryForm.majorA == "") {
     ElMessage.warning("最少选择一门专业！");
     return;
   }
-  if (majorSelection.value.length > 6) {
-    ElMessage.warning("最多选择六门专业！");
-    return;
+  const loadingInstance = ElLoading.service({
+    fullscreen: true,
+    text: "正在加载中...",
+  });
+  try {
+    const response = await request.post(
+      "/userVoluntary/addVoluntary",
+      VoluntaryForm
+    );
+    if (response.code == 200) {
+      ElMessage.success("添加成功！");
+      VoluntaryForm.schoolName = "";
+      VoluntaryForm.majorA = "";
+      VoluntaryForm.majorB = "";
+      VoluntaryForm.majorC = "";
+      VoluntaryForm.majorD = "";
+      VoluntaryForm.majorE = "";
+      VoluntaryForm.majorF = "";
+    } else {
+      ElMessage.error(response.message);
+    }
+  } catch (error) {
+    ElMessage.error(error);
   }
+  loadingInstance.close();
   showTableDialog.value = false;
 };
 onMounted(getRank(), getRecommendList());
