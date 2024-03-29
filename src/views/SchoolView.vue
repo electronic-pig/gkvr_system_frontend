@@ -22,7 +22,17 @@
       <el-radio-button label="双一流" value="双一流" />
     </el-radio-group>
   </div>
-
+  <div class="province-group">
+    <el-radio-group v-model="provinceName" @change="getByProvince">
+      <el-radio
+        v-for="item in provinceList"
+        :key="item"
+        :label="item"
+        :value="item"
+        border
+      />
+    </el-radio-group>
+  </div>
   <div class="content">
     <div class="school-list">
       <ul>
@@ -133,15 +143,17 @@ import { useRouter } from "vue-router";
 import { ElLoading, ElMessage } from "element-plus";
 import request from "@/utils/request.js";
 import schoolRankList from "@/assets/schoolRankList.json";
+import provinceList from "@//assets/provinceList.json";
 
 let searchValue = ref("");
 let schoolClass = ref("全部");
+let provinceName = ref("全部");
 let schoolList = ref([]);
 let pageNum = ref(1);
 let total = ref(0);
 const router = useRouter();
 
-watch(schoolClass, () => {
+watch([schoolClass, provinceName], () => {
   pageNum.value = 1;
 });
 
@@ -155,6 +167,7 @@ const handleSearch = async () => {
     text: "正在加载中...",
   });
   schoolClass.value = "全部";
+  provinceName.value = "全部";
   try {
     const response = await request.get(
       "/schoolInfo/searchByName?page=" +
@@ -180,6 +193,7 @@ const getSortedSchools = async () => {
     text: "正在加载中...",
   });
   searchValue.value = "";
+  provinceName.value = "全部";
   let url = "";
   switch (schoolClass.value) {
     case "985":
@@ -208,10 +222,37 @@ const getSortedSchools = async () => {
   loadingInstance.close();
 };
 
+const getByProvince = async () => {
+  const loadingInstance = ElLoading.service({
+    fullscreen: true,
+    text: "正在加载中...",
+  });
+  searchValue.value = "";
+  schoolClass.value = "全部";
+  try {
+    const response = await request.get(
+      "/schoolInfo/province?page=" +
+        pageNum.value +
+        "&province_name=" +
+        provinceName.value
+    );
+    if (response.code == 200) {
+      total.value = response.data.total;
+      schoolList.value = response.data.schools;
+    } else {
+      ElMessage.error(response.message);
+    }
+  } catch (error) {
+    ElMessage.error(error);
+  }
+  loadingInstance.close();
+};
+
 const handleCurrentChange = (newPage) => {
   pageNum.value = newPage;
   if (searchValue.value) handleSearch();
-  else getSortedSchools();
+  else if (schoolClass.value !== "全部") getSortedSchools();
+  else getByProvince();
 };
 
 onMounted(getSortedSchools);
@@ -223,6 +264,16 @@ onMounted(getSortedSchools);
   justify-content: space-evenly;
   margin: 2vh auto;
   height: 40px;
+}
+
+.province-group {
+  display: flex;
+  margin: 0 auto;
+}
+
+.el-radio {
+  margin: 2px 10px;
+  width: 80px;
 }
 
 .search-box {

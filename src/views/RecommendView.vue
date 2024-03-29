@@ -13,7 +13,7 @@
           v-model="userScore"
           placeholder="您的分数"
           type="number"
-          @keyup.enter="getRank()"
+          @keyup.enter="getRank(), getRecommendList()"
         ></el-input>
       </el-form-item>
       <el-form-item label="排名" style="margin-left: 2vw">
@@ -80,7 +80,11 @@
                 ></span
               >
             </div>
-            <el-button @click="handleCommit(school.schoolId)">
+            <el-button
+              size="large"
+              style="margin: auto 0"
+              @click="handleCommit(school.schoolId)"
+            >
               +志愿表
             </el-button>
           </div>
