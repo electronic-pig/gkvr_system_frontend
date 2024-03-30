@@ -80,7 +80,7 @@
       <div class="table common-card">
         <!-- 2022年四川省理科录取分数线 -->
         <el-table height="1070px" :data="majorScore">
-          <el-table-column prop="spname" label="专业名称" />
+          <el-table-column prop="majorName" label="专业名称" />
           <el-table-column prop="batch" label="录取批次" width="80px" />
           <el-table-column prop="min" label="最低分" width="66px" />
           <el-table-column prop="minSection" label="最低位次" width="80px" />

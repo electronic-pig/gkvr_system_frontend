@@ -117,7 +117,7 @@ const showDialog = async () => {
   });
   try {
     const response = await request.get(
-      "/userVoluntary/getVoluntary?user_name=" + username.value
+      "/userVoluntary/getVoluntary?username=" + username.value
     );
     if (response.code == 200) {
       userTable.value = response.data.userVoluntary;

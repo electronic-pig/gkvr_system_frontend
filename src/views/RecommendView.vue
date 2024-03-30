@@ -13,7 +13,7 @@
           v-model="userScore"
           placeholder="您的分数"
           type="number"
-          @keyup.enter="getRank(), getRecommendList()"
+          @keyup.enter="getRank()"
         ></el-input>
       </el-form-item>
       <el-form-item label="排名" style="margin-left: 2vw">
@@ -114,7 +114,7 @@
       @selection-change="handleSelectionChange"
     >
       <el-table-column type="selection" width="30px" />
-      <el-table-column prop="spname" label="专业名称" />
+      <el-table-column prop="majorName" label="专业名称" />
       <el-table-column prop="batch" label="录取批次" width="80px" />
       <el-table-column prop="level2" label="学科类别" width="80px" />
       <el-table-column prop="level3" label="专业类别" width="80px" />
@@ -196,23 +196,31 @@ const getRecommendList = async () => {
 };
 
 const getRank = async () => {
-  const loadingInstance = ElLoading.service({
-    fullscreen: true,
-    text: "正在加载中...",
-  });
+  if (userScore.value == "") {
+    ElMessage.error("请输入分数！");
+    return;
+  }
+  if (userScore.value < 0 || userScore.value > 750) {
+    ElMessage.error("请输入正确的分数！");
+    return;
+  }
+  if (userScore.value < 100 || userScore.value > 695) {
+    ElMessage.error("无数据");
+    return;
+  }
   try {
     const response = await request.get(
       "/scoreRank/getRank?score=" + userScore.value
     );
     if (response.code == 200) {
       userRank.value = response.data.scoreRank.rankRange;
+      ElMessage.success("查询排名成功！");
     } else {
       ElMessage.error(response.message);
     }
   } catch (error) {
     ElMessage.error(error);
   }
-  loadingInstance.close();
 };
 
 const handleCurrentChange = (newPage) => {
@@ -251,28 +259,28 @@ const handleSelectionChange = (val) => {
     return;
   }
   VoluntaryForm.majorA =
-    val.map((item) => item.spname).length > 0
-      ? val.map((item) => item.spname)[0]
+    val.map((item) => item.majorName).length > 0
+      ? val.map((item) => item.majorName)[0]
       : "";
   VoluntaryForm.majorB =
-    val.map((item) => item.spname).length > 1
-      ? val.map((item) => item.spname)[1]
+    val.map((item) => item.majorName).length > 1
+      ? val.map((item) => item.majorName)[1]
       : "";
   VoluntaryForm.majorC =
-    val.map((item) => item.spname).length > 2
-      ? val.map((item) => item.spname)[2]
+    val.map((item) => item.majorName).length > 2
+      ? val.map((item) => item.majorName)[2]
       : "";
   VoluntaryForm.majorD =
-    val.map((item) => item.spname).length > 3
-      ? val.map((item) => item.spname)[3]
+    val.map((item) => item.majorName).length > 3
+      ? val.map((item) => item.majorName)[3]
       : "";
   VoluntaryForm.majorE =
-    val.map((item) => item.spname).length > 4
-      ? val.map((item) => item.spname)[4]
+    val.map((item) => item.majorName).length > 4
+      ? val.map((item) => item.majorName)[4]
       : "";
   VoluntaryForm.majorF =
-    val.map((item) => item.spname).length > 5
-      ? val.map((item) => item.spname)[5]
+    val.map((item) => item.majorName).length > 5
+      ? val.map((item) => item.majorName)[5]
       : "";
 };
 

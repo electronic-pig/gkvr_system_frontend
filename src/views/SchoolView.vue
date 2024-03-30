@@ -231,9 +231,9 @@ const getByProvince = async () => {
   schoolClass.value = "全部";
   try {
     const response = await request.get(
-      "/schoolInfo/province?page=" +
+      "/schoolInfo/getByProvince?page=" +
         pageNum.value +
-        "&province_name=" +
+        "&provinceName=" +
         provinceName.value
     );
     if (response.code == 200) {
