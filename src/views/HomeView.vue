@@ -9,13 +9,8 @@
   </el-container>
 </template>
 
-<script>
+<script setup>
 import CommonMenu from "@/components/CommonMenu.vue";
-export default {
-  components: {
-    CommonMenu,
-  },
-};
 </script>
   
 <style scoped>

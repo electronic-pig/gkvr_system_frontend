@@ -1,10 +1,10 @@
 import { createRouter, createWebHistory } from "vue-router";
-import PortalView from "../views/PortalView.vue";
-import HomeView from "../views/HomeView.vue";
-import SchoolView from "../views/SchoolView.vue";
-import MajorView from "../views/MajorView.vue";
-import RecommendView from "../views/RecommendView.vue";
-import SchoolDetail from "../views/SchoolDetail.vue"
+import PortalView from "@/views/PortalView.vue";
+import HomeView from "@/views/HomeView.vue";
+import SchoolView from "@/views/SchoolView.vue";
+import MajorView from "@/views/MajorView.vue";
+import RecommendView from "@/views/RecommendView.vue";
+import SchoolDetail from "@/views/SchoolDetail.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),

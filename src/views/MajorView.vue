@@ -105,12 +105,12 @@ import request from "@/utils/request.js";
 import majorTypeList from "@/assets/majorTypeList.json";
 import majorRankList from "@/assets/majorRankList.json";
 
-let searchValue = ref("");
-let majorClass = ref("本科");
-let type = ref("全部");
-let pageNum = ref(1);
-let total = ref(0);
-let majorList = ref([]);
+const searchValue = ref("");
+const majorClass = ref("本科");
+const type = ref("全部");
+const pageNum = ref(1);
+const total = ref(0);
+const majorList = ref([]);
 
 watch(type, () => {
   pageNum.value = 1;

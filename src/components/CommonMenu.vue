@@ -87,9 +87,9 @@ const menu = [
 ];
 const router = useRouter();
 const route = useRoute();
-let username = ref(localStorage.getItem("username"));
-let showTableDialog = ref(false);
-let userTable = ref([]);
+const username = ref(localStorage.getItem("username"));
+const showTableDialog = ref(false);
+const userTable = ref([]);
 const VoluntaryForm = reactive({
   userName: username,
   schoolName: "",
@@ -154,6 +154,7 @@ const handleDelete = async (row) => {
   }
   loadingInstance.close();
 };
+
 </script>
 
 <style scoped>

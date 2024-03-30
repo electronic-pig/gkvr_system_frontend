@@ -134,17 +134,17 @@ import { ElLoading, ElMessage } from "element-plus";
 import { useRouter } from "vue-router";
 import request from "../utils/request.js";
 
-let subject = ref("理科");
-let userScore = ref(600);
-let userRank = ref("");
-let risk = ref("全部");
-let schoolList = ref([]);
-let averageScores = ref([]);
-let upLineRateList = ref([]);
-let pageNum = ref(1);
-let total = ref(0);
-let schoolMajors = ref([]);
-let showTableDialog = ref(false);
+const subject = ref("理科");
+const userScore = ref(600);
+const userRank = ref("");
+const risk = ref("全部");
+const schoolList = ref([]);
+const averageScores = ref([]);
+const upLineRateList = ref([]);
+const pageNum = ref(1);
+const total = ref(0);
+const schoolMajors = ref([]);
+const showTableDialog = ref(false);
 const multipleTable = ref(null);
 const VoluntaryForm = reactive({
   userName: localStorage.getItem("username"),
@@ -224,6 +224,7 @@ const getRank = async () => {
 };
 
 const handleCurrentChange = (newPage) => {
+  pageNum.value = newPage;
   getRecommendList();
 };
 
@@ -316,6 +317,7 @@ const commitVoluntary = async () => {
   loadingInstance.close();
   showTableDialog.value = false;
 };
+
 onMounted(getRank(), getRecommendList());
 </script>
 

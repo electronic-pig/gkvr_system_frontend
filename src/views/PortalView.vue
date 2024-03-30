@@ -119,8 +119,8 @@ import { ElLoading, ElMessage } from "element-plus";
 import request from "@/utils/request.js";
 
 const router = useRouter();
-let showLoginDialog = ref(false);
-let showRegisterDialog = ref(false);
+const showLoginDialog = ref(false);
+const showRegisterDialog = ref(false);
 
 const registerForm = reactive({
   username: "",

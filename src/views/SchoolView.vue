@@ -145,12 +145,12 @@ import request from "@/utils/request.js";
 import schoolRankList from "@/assets/schoolRankList.json";
 import provinceList from "@//assets/provinceList.json";
 
-let searchValue = ref("");
-let schoolClass = ref("全部");
-let provinceName = ref("全部");
-let schoolList = ref([]);
-let pageNum = ref(1);
-let total = ref(0);
+const searchValue = ref("");
+const schoolClass = ref("全部");
+const provinceName = ref("全部");
+const schoolList = ref([]);
+const pageNum = ref(1);
+const total = ref(0);
 const router = useRouter();
 
 watch([schoolClass, provinceName], () => {

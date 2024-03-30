@@ -120,18 +120,14 @@
 import { ref, onMounted, reactive } from "vue";
 import { useRoute } from "vue-router";
 import { ElMessage, ElLoading } from "element-plus";
-import * as echarts from "echarts";
 import request from "../utils/request.js";
+import * as echarts from "echarts";
 
-const route = useRoute();
 const schoolId = useRoute().params.id;
-let schoolInfoDetail = reactive({});
-let schoolInfo = reactive({});
-let scLiScore = reactive({});
-let majorScore = ref([]);
-
-const type = ref("理科");
-const year = ref("2022");
+const schoolInfoDetail = reactive({});
+const schoolInfo = reactive({});
+const scLiScore = reactive({});
+const majorScore = ref([]);
 
 let scoreChart;
 let levelChart;
