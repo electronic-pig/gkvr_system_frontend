@@ -1,5 +1,6 @@
 # 高考志愿推荐平台_前端
 ![GitHub](https://img.shields.io/github/license/electronic-pig/gkvr_system_frontend)
+![GitHub Release](https://img.shields.io/github/v/release/electronic-pig/gkvr_system_frontend)
 ![Static Badge](https://img.shields.io/badge/collaborator-3-lightblue)
 ![node.js version](https://img.shields.io/badge/nodejs-18+-orange.svg)
 ![GitHub Repo stars](https://img.shields.io/github/stars/electronic-pig/gkvr_system_frontend)
