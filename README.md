@@ -1,52 +1,108 @@
 # 高考志愿推荐平台_前端
 ![GitHub](https://img.shields.io/github/license/electronic-pig/gkvr_system_frontend)
-<img alt="GitHub contributors" src="https://img.shields.io/github/contributors/electronic-pig/gkvr_system_frontend">
+![Static Badge](https://img.shields.io/badge/collaborator-3-lightblue)
+![node.js version](https://img.shields.io/badge/nodejs-18+-orange.svg)
 ![GitHub Repo stars](https://img.shields.io/github/stars/electronic-pig/gkvr_system_frontend)
 
-## 最新动态
-- [2024/3/23] 🔥 对前端代码进行重构，更换了前端架构，目前正在更新中，旧版本代码请查看tag v1.0.0
-## 项目介绍
-一个前后端分离的高考志愿推荐系统(gaokao volunteer recommendation system)
+## 🔥 最新动态 [2024/3/31] 
+- 完成了对前端代码的重构，更改了一些页面样式，提高了代码的可读性
+- 新版本v2.0.0已发布，旧版本代码请查看tag v1.0.0
 
-~~在线体验地址：[高考志愿推荐平台](http://gkvr.japaneast.cloudapp.azure.com) (用户名：admin 密码：123456)~~
+## ✨ 项目介绍
+一个前后端分离的高考志愿推荐系统(gaokao volunteer recommendation system)
 
 若您对项目后端感兴趣，请前往[后端仓库](https://github.com/electronic-pig/gkvr_system_backend)
 
-若本项目对您有所帮助，请在页面右上角点个 Star ⭐ 支持一下，谢谢！
-## 页面展示
-> 登录界面
+在线体验地址：[高考志愿推荐平台](http://lyserver.eastasia.cloudapp.azure.com/) (用户名：admin 密码：123456)
+> [!NOTE]
+> 本项目部署在小型云服务器上，服务器承载能力有限，可能会出现网址访问失败的情况
 
-![网页捕获_22-9-2023_81719_gkvr japaneast cloudapp azure com](https://github.com/electronic-pig/gkvr_system_frontend/assets/103497254/d9a3a59a-5ce6-484c-84da-268e057df54e)
+## 🛠 技术栈
+
+- vite + vue3(组合式API)
+- Element Plus
+- Apache Echarts
+
+<a title="vue" href="https://cn.vuejs.org/" target="_blank">
+    <img height="64px" src="https://github.com/electronic-pig/Yelp-Analysis-and-Reco_frontend/assets/103497254/5d6e1a71-1ac2-4043-866b-17ae33afadfd"/>
+</a>
+<a title="element-plus" href="https://element-plus.org/zh-CN/" target="_blank">
+    <img height="64px" src="https://github.com/electronic-pig/Yelp-Analysis-and-Reco_frontend/assets/103497254/795c9710-e667-49b8-8514-2cc6663b3f8c"/>
+</a>
+<a title="echarts" href="https://echarts.apache.org/zh/index.html" target="_blank">
+    <img height="64px" src="https://github.com/electronic-pig/Yelp-Analysis-and-Reco_frontend/assets/103497254/0106ecb9-df25-4f3c-a27e-d763a75b14af"/>
+</a>
+
+## 🚀 项目运行说明
+> [!Warning]
+> 本项目的数据信息爬取自[掌上高考](https://www.gaokao.cn/)，项目成员对数据真实性不做任何保证，一切以学校官网为准
+
+在执行后续步骤之前，请确保您配置好了以下环境：
+
+- nodejs ≥ 18.19.1
+
+然后在项目根目录执行以下步骤：
+
+### 安装依赖
+```sh
+npm install
+```
+
+### 编译运行
+- 在`.env.development`中填写你的后端服务地址
+```sh
+npm run dev
+```
+
+### 打包部署(可选)
+- 在`.env.production`中填写你的后端服务地址
+```sh
+npm run build
+```
+
+## 💻 运行截图
+> [!NOTE]
+> 本项目由项目成员在大学学习期间开发，开发周期短，部分页面功能仅作展示用，实际情况请参考源码
+
+> 首页
+
+![首页](https://github.com/electronic-pig/gkvr_system_frontend/assets/103497254/3a7b33cb-a1ab-4d7d-a293-67aabc5ea464)
 
 > 高校信息查询
 
-![网页捕获_22-9-2023_81740_gkvr japaneast cloudapp azure com](https://github.com/electronic-pig/gkvr_system_frontend/assets/103497254/78f5802d-595f-4d19-9de0-25c405dcb01f)
+![高校信息查询](https://github.com/electronic-pig/gkvr_system_frontend/assets/103497254/305e3aa7-c1cd-4167-a5a1-69feb85b4b5a)
 
 > 学校详情页
 
-![网页捕获_22-9-2023_83711_gkvr japaneast cloudapp azure com](https://github.com/electronic-pig/gkvr_system_frontend/assets/103497254/3ed37ae3-b817-42c6-ae50-e1f26f232a54)
+![学校详情页](https://github.com/electronic-pig/gkvr_system_frontend/assets/103497254/40c01754-dbe5-4279-ad13-e543b700c923)
 
 > 专业信息查询
 
-![网页捕获_22-9-2023_8184_gkvr japaneast cloudapp azure com](https://github.com/electronic-pig/gkvr_system_frontend/assets/103497254/a562148b-370b-46fd-890a-9f11c6017a9f)
+![专业信息查询](https://github.com/electronic-pig/gkvr_system_frontend/assets/103497254/182e125d-efe1-4e09-a141-59ad321ddc57)
 
 > 个性化志愿推荐
 
-![网页捕获_22-9-2023_8190_gkvr japaneast cloudapp azure com](https://github.com/electronic-pig/gkvr_system_frontend/assets/103497254/d88778ee-f7be-41f5-9d48-7c55e69ec2ca)
+![志愿推荐](https://github.com/electronic-pig/gkvr_system_frontend/assets/103497254/f8f120b5-4a7b-4d65-b331-3748d60df36f)
 
-> 志愿表
+> 模拟志愿填报
 
-![screenshot20230922](https://github.com/electronic-pig/gkvr_system_frontend/assets/103497254/98ee473d-0d0b-474b-b6cb-c88adbe7dd59)
-## 项目须知
-⚠️ 本项目由项目成员在大学学习期间开发，时间紧，开发周期短，部分页面功能仅作展示用，实际情况请参考源码
+<table>
+    <tr>
+        <td align="center">专业填报</td>
+        <td align="center">志愿表</td>
+    </tr>
+    <tr>
+        <td><img src="https://github.com/electronic-pig/gkvr_system_frontend/assets/103497254/85d1a419-fa90-4191-8c3f-560be82c4516"></td>
+        <td><img src="https://github.com/electronic-pig/gkvr_system_frontend/assets/103497254/a5cc21cb-281d-44ac-9d4d-f13e79677923"></td>
+    </tr>
+</table>
 
-⚠️ 本项目的数据信息爬取自[掌上高考](https://www.gaokao.cn/)，项目成员对数据真实性不做任何保证，且项目存在数据紊乱和错误的情况，一切以学校官网为准
-
-⚠️ 本项目部署在小型云服务器上，服务器承载能力有限，可能会出现网址访问失败的情况(2024/3/23 服务器已挂)
-
-## 鸣谢
+## 🙏 鸣谢
 前端UI设计部分参考自[Cabbage-xy/gaokao](https://github.com/Cabbage-xy/gaokao)，在此感谢此开源贡献者
-## 项目参与者
-<a href="https://github.com/electronic-pig/gkvr_system_frontend/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=electronic-pig/gkvr_system_frontend" />
-</a>
+
+## 💖 团队成员
+本项目由以下三位开发者共同完成(排名不分先后)：[electronic-pig](https://github.com/electronic-pig)、[zf666fz](https://github.com/zf666fz)、[weeadd](https://github.com/weeadd)
+
+v2.0.0版本的更新与维护由仓库所有者[electronic-pig](https://github.com/electronic-pig)完成
+## 📄 写在最后
+项目制作不易，如果它对你有帮助的话，请务必给作者点一个免费的⭐，万分感谢!🙏🙏🙏
