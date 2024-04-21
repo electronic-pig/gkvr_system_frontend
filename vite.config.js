@@ -5,6 +5,7 @@ import VueDevTools from "vite-plugin-vue-devtools";
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  base: "/gkvr_system_frontend/",
   plugins: [vue(), VueDevTools()],
   resolve: {
     alias: {
