@@ -6,22 +6,18 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview",
-    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore"
+    "preview": "vite preview"
   },
   "dependencies": {
     "normalize.css": "^8.0.1",
     "echarts": "^5.5.1",
-    "element-plus": "^2.7.6",
-    "axios": "^1.7.4",
-    "vue": "^3.4.30",
-    "vue-router": "^4.4.0"
+    "element-plus": "^2.8.1",
+    "axios": "^1.7.5",
+    "vue": "^3.4.38",
+    "vue-router": "^4.4.3"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^5.0.4",
-    "vite": "^5.2.6",
-    "eslint": "^8.57.0",
-    "eslint-plugin-vue": "^9.23.0",
-    "vite-plugin-vue-devtools": "^7.0.20"
+    "@vitejs/plugin-vue": "^5.1.2",
+    "vite": "^5.4.2"
   }
 }

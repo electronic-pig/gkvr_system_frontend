@@ -3,7 +3,7 @@ import axios from "axios";
 
 // 创建axios实例
 const service = axios.create({
-  baseURL: import.meta.env.VITE_APP_BASE_URL, // API的base_url
+  baseURL: '/api',
   timeout: 50000, // 请求超时时间
 });
 
