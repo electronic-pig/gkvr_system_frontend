@@ -1,4 +1,4 @@
-# 高考志愿推荐平台_前端
+# 高考志愿推荐系统_前端
 ![GitHub](https://img.shields.io/github/license/electronic-pig/gkvr_system_frontend)
 ![GitHub Release](https://img.shields.io/github/v/release/electronic-pig/gkvr_system_frontend)
 ![Static Badge](https://img.shields.io/badge/collaborator-3-lightblue)
@@ -10,7 +10,7 @@
 
 若您对项目后端感兴趣，请前往[后端仓库](https://github.com/electronic-pig/gkvr_system_backend).
 
-在线体验地址：[高考志愿推荐平台](http://lyserver.eastasia.cloudapp.azure.com/) (用户名：admin 密码：123456)
+在线体验地址：[高考志愿推荐系统](http://lyserver.eastasia.cloudapp.azure.com/) (用户名：admin 密码：123456)
 > [!NOTE]
 > 本项目部署在小型云服务器上，服务器承载能力有限，可能会出现网址访问失败的情况
 
@@ -92,13 +92,13 @@ npm run build
     </tr>
 </table>
 
-## 🙏 鸣谢
-前端UI设计部分参考自[Cabbage-xy/gaokao](https://github.com/Cabbage-xy/gaokao)，在此感谢该开源作者!🙏🙏
+## 🖥️ 界面设计
+前端UI设计部分参考自[Cabbage-xy/gaokao](https://github.com/Cabbage-xy/gaokao)，在此感谢此开源作者!🙏🙏
 
 ## 🤝 团队成员
 本项目由以下三位开发者共同完成(不分先后)：[electronic-pig](https://github.com/electronic-pig)、[zf666fz](https://github.com/zf666fz)、[weeadd](https://github.com/weeadd)
 
-v2.0.0版本的更新与维护由仓库所有者[electronic-pig](https://github.com/electronic-pig)完成
+v2版本的更新与维护由仓库所有者[electronic-pig](https://github.com/electronic-pig)完成
 
 ## ✍ 写在最后
 项目制作不易，如果它对你有帮助的话，请务必给作者点一个免费的⭐，万分感谢!🙏🙏🙏
