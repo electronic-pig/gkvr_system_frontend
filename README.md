@@ -10,7 +10,13 @@
 
 若您对项目后端感兴趣，请前往[后端仓库](https://github.com/electronic-pig/gkvr_system_backend)
 
-在线体验地址：[高考志愿推荐系统](http://electronic-pig.eastasia.cloudapp.azure.com/) (用户名：admin 密码：123456)
+点击右上角项目网址进行体验!🥰
+
+```bash
+用户名: admin
+密码: 123456
+```
+
 > [!NOTE]
 > 本项目部署在小型云服务器上，服务器承载能力有限，可能会出现网址访问失败的情况
 
