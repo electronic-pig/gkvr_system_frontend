@@ -11,7 +11,7 @@
   "dependencies": {
     "normalize.css": "^8.0.1",
     "echarts": "^5.5.1",
-    "element-plus": "^2.8.1",
+    "element-plus": "^2.11.0",
     "axios": "^1.8.2",
     "vue": "^3.4.38",
     "vue-router": "^4.4.3"
